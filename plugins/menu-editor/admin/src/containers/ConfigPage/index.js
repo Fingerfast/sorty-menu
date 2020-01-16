@@ -17,7 +17,7 @@ import {ContainerFluid, PluginHeader} from 'strapi-helper-plugin';
 import pluginId from '../../pluginId';
 
 // Plugin's components
-import MenuEditor from '../../components/MenuEditor';
+import MenuEditor from '../../components/MenuEditor/MenuEditor';
 
 import {getSettings, onCancel, onChange, setErrors, submit} from './actions';
 
@@ -92,7 +92,7 @@ class ConfigPage extends React.Component {
   ]
 
   render() {
-    console.log('this state:::' , this.state)
+    // console.log('this state:::' , this.state)
     return (
       <div>
         <form onSubmit={this.handleSubmit}>
