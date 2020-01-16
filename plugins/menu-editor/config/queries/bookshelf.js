@@ -10,8 +10,9 @@ module.exports = model => ({
 
     return await Bookshelf.transaction(async t => {
       try {
-        await Menu.where({id: menu_id}).destroy({transacting: t})
-        await MenuItem.where({menu_id}).destroy({transacting: t})
+        await Promise.all([
+          MenuItem.where({menu_id}).destroy({transacting: t}),
+          Menu.where({id: menu_id}).destroy({transacting: t})])
 
         return
       } catch (error) {
@@ -21,28 +22,33 @@ module.exports = model => ({
   },
   putMenuById: async ({menu_id, title, menu_items}) => {
     const Bookshelf = new bookshelf(strapi.connections.default);
-
+    //TODO catch errors
     return await Bookshelf.knex.transaction(async trx => {
       try {
-        await Bookshelf.knex('menu-editor_menu')
+        const menuExists = await Bookshelf.knex('menu-editor_menu')
           .transacting(trx)
           .where({ id: menu_id })
-          .update({title});
 
-        await Bookshelf.knex('menu-editor_menu_item')
-         .transacting(trx)
-         .where({ menu_id })
-         .del();
+        if (menuExists.length > 0) {
+          await Bookshelf.knex('menu-editor_menu')
+            .transacting(trx)
+            .where({ id: menu_id })
+            .update({title});
 
-        await Bookshelf.knex('menu-editor_menu_item')
-          .transacting(trx)
-          .insert(menu_items);
+          await Bookshelf.knex('menu-editor_menu_item')
+           .transacting(trx)
+           .where({ menu_id })
+           .del();
 
-        await trx.commit;
+          await Bookshelf.knex('menu-editor_menu_item')
+            .transacting(trx)
+            .insert(menu_items);
 
-        return
+          await trx.commit;
+        } else {
+          throw new Error("Menu with this ID doesn't exists");
+        }
       } catch (error) {
-        console.log('error', error);
         await trx.rollback;
       }
     });

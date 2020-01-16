@@ -91,7 +91,7 @@ module.exports = {
         message: 'ok',
       });
     } catch (error) {
-      console.log('putMenuById error:', error);
+      console.log('putMenuById error:', JSON.stringify(error));
       ctx.send(
         {
           message: 'error',
