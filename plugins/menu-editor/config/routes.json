@@ -1,0 +1,28 @@
+{
+  "routes": [
+    {
+      "method": "GET",
+      "path": "/",
+      "handler": "Menus.getMenus",
+      "config": {
+        "policies": []
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/list-menus",
+      "handler": "Menus.getMenusList",
+      "config": {
+        "policies": []
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/",
+      "handler": "Menus.setMenus",
+      "config": {
+        "policies": []
+      }
+    }
+  ]
+}
