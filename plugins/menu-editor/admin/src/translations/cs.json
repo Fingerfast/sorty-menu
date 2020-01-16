@@ -1,10 +1,10 @@
 {
   "ConfigPage.description": "Zde lze editovat menu",
   "ConfigPage.title": "Menu - Editor",
-  "EditForm.remove": "Odstranit",
-  "EditForm.add": "Přidat",
-  "EditForm.addNewMenu": "Přidat nové menu",
-  "EditForm.chooseMenu": "Vybrat menu",
-  "EditForm.editMode": "Editovat",
-  "EditForm.cancelEditMode": "Zahodit změny"
+  "MenuEditor.remove": "Odstranit",
+  "MenuEditor.add": "Přidat",
+  "MenuEditor.addNewMenu": "Přidat nové menu",
+  "MenuEditor.chooseMenu": "Vybrat menu",
+  "MenuEditor.editMode": "Editovat",
+  "MenuEditor.cancelEditMode": "Zahodit změny"
 }
