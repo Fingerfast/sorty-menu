@@ -4,5 +4,7 @@
   "EditForm.remove": "Remove",
   "EditForm.add": "Add",
   "EditForm.addNewMenu": "Add new menu",
-  "EditForm.chooseMenu": "Choose menu"
+  "EditForm.chooseMenu": "Choose menu",
+  "EditForm.editMode": "Edit",
+  "EditForm.cancelEditMode": "Cancel"
 }

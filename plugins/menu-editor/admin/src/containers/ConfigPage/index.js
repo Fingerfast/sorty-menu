@@ -17,7 +17,7 @@ import {ContainerFluid, PluginHeader} from 'strapi-helper-plugin';
 import pluginId from '../../pluginId';
 
 // Plugin's components
-import EditForm from '../../components/EditForm';
+import MenuEditor from '../../components/MenuEditor';
 
 import {getSettings, onCancel, onChange, setErrors, submit} from './actions';
 
@@ -26,6 +26,12 @@ import saga from './saga';
 import selectConfigPage from './selectors';
 
 class ConfigPage extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      editMode: false,
+    };
+  }
   componentDidMount() {
     this.getSettings();
   }
@@ -52,6 +58,8 @@ class ConfigPage extends React.Component {
     return this.props.submit();
   };
 
+
+
   setMenus = newMenusList => {
     this.setState(prevState => ({
       ...prevState,
@@ -62,8 +70,8 @@ class ConfigPage extends React.Component {
   pluginHeaderActions = [
     {
       kind: 'secondary',
-      label: 'app.components.Button.cancel',
-      onClick: this.props.onCancel,
+      label: 'menu-editor.MenuEditor.cancelEditMode',
+      onClick: () => this.setState({editMode: false}),
       type: 'button',
     },
     {
@@ -74,17 +82,27 @@ class ConfigPage extends React.Component {
     },
   ];
 
+  actionEdit = [
+    {
+      kind: 'secondary',
+      label: 'menu-editor.MenuEditor.editMode',
+      onClick: () => this.setState({editMode: true}),
+      type: 'button',
+    },
+  ]
+
   render() {
+    console.log('this state:::' , this.state)
     return (
       <div>
         <form onSubmit={this.handleSubmit}>
           <ContainerFluid>
             <PluginHeader
-              actions={this.pluginHeaderActions}
+              actions={this.state.editMode ? this.pluginHeaderActions : this.actionEdit}
               description={{id: 'menu-editor.ConfigPage.description'}}
               title={{id: 'menu-editor.ConfigPage.title'}}
             />
-            <EditForm
+            <MenuEditor
               didCheckErrors={this.props.didCheckErrors}
               formErrors={this.props.formErrors}
               initialData={this.props.initialData}

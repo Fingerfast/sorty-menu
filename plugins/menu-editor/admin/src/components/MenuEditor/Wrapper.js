@@ -8,7 +8,6 @@ const Item = styled.div`
   border-image: initial;
   padding: 16px;
   background: rgb(255, 255, 255);
-  '&:hover' 
 `;
 
 const Wrapper = styled.div`
@@ -26,6 +25,11 @@ const Wrapper = styled.div`
     padding: 23px 30px 0 30px;
     background-color: #fafafb;
   }
+`;
+
+const AddMenu = styled.div`
+  padding: 15px;
+  background: #007eff;
 `;
 
 export { Wrapper, Item };
