@@ -1,7 +1,13 @@
 import React from 'react';
-import Sortly, { ContextProvider, remove, add } from 'react-sortly';
 
-export default function MySortableTree ({ onChange, currentMenu, modifiedData = [] }) {
+import Sortly, { remove, add } from 'react-sortly';
+
+import nanoid from 'nanoid/non-secure';
+import { FormattedMessage } from 'react-intl';
+import SortableTreeItem from './SortableTreeItem';
+
+const MySortableTree = ({ onChange, currentMenu, modifiedData }) => {
+
   const handleChangeRow = (id, target) => {
     const index = modifiedData.findIndex(item => item.id === id);
     const { name, value } = target;
@@ -40,23 +46,17 @@ export default function MySortableTree ({ onChange, currentMenu, modifiedData = 
           onChange={values => onChange('modifiedData', values)}
         >
           {props => (
-            <ItemRenderer {...{ handleDelete, handleChangeRow }} {...props} />
+            <SortableTreeItem {...{ handleDelete, handleChangeRow }} {...props} />
           )}
         </Sortly>
       </div>
       <div className="row">
-        <Button kind="secondary" onClick={handleClickAdd}>
-          <FormattedMessage id={'menu-editor.EditForm.add'} />
-        </Button>
+        <button kind="secondary" onClick={handleClickAdd}>
+          <FormattedMessage id={'menu-editor.MenuEditor.add'} />
+        </button>
       </div>
     </>
   );
 };
 
-MySortableTree.propTypes = {
-  // didCheckErrors: PropTypes.bool.isRequired,
-  // formErrors: PropTypes.array.isRequired,
-  modifiedData: PropTypes.array,
-  onChange: PropTypes.func.isRequired,
-  currentMenu: PropTypes.string.isRequired,
-};
+export default MySortableTree;
