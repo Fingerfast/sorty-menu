@@ -4,5 +4,7 @@
   "EditForm.remove": "Odstranit",
   "EditForm.add": "Přidat",
   "EditForm.addNewMenu": "Přidat nové menu",
-  "EditForm.chooseMenu": "Vybrat menu"
+  "EditForm.chooseMenu": "Vybrat menu",
+  "EditForm.editMode": "Editovat",
+  "EditForm.cancelEditMode": "Zahodit změny"
 }

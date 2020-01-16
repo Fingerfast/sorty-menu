@@ -4,6 +4,7 @@
  *
  */
 
+export const CREATE_MENU = 'menu-editor/CREATE_MENU';
 export const GET_SETTINGS = 'menu-editor/ConfigPage/GET_SETTINGS';
 export const GET_SETTINGS_SUCCEEDED =
   'menu-editor/ConfigPage/GET_SETTINGS_SUCCEEDED';

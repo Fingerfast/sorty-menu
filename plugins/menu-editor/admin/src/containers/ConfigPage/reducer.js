@@ -7,6 +7,7 @@
 import { fromJS, List } from 'immutable';
 
 import {
+  CREATE_MENU,
   GET_SETTINGS,
   GET_SETTINGS_SUCCEEDED,
   ON_CANCEL,
@@ -19,7 +20,10 @@ import {
 const initialState = fromJS({
   didCheckErrors: false,
   formErrors: List([]),
-  initialData: [],
+  initialData: [
+    {"id":"1","order":0,"name":"Kontakt","parent_id":0,"menu_id":"1"},
+    {"id":"2","order":1,"name":"Pobočky","parent_id":"1","menu_id":"1"},
+    {"id":"3","order":0,"name":"Kudy k nám","parent_id":"1","menu_id":"1"}],
   modifiedData: [],
   settings: [],
   currentMenu: null,
@@ -30,6 +34,8 @@ const initialState = fromJS({
 
 function configPageReducer(state = initialState, action) {
   switch (action.type) {
+    case CREATE_MENU:
+      return state;
     case GET_SETTINGS:
       return state;
     case GET_SETTINGS_SUCCEEDED:
@@ -41,7 +47,7 @@ function configPageReducer(state = initialState, action) {
           .update('initialMenusList', () => action.initialMenusList)
           .update('modifiedMenusList', () => action.initialMenusList)
           .update('initialData', () => action.initialData)
-          //.update('modifiedData', () => action.initialData)
+          .update('modifiedData', () => action.initialData)
       );
     case ON_CANCEL:
       return (
