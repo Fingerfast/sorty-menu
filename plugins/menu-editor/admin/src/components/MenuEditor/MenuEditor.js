@@ -4,7 +4,6 @@ import React, {
   useCallback,
   useEffect,
 } from 'react';
-import PropTypes from 'prop-types';
 import { DndProvider } from 'react-dnd';
 import HTML5Backend from 'react-dnd-html5-backend';
 import { ContextProvider } from 'react-sortly';
@@ -12,23 +11,26 @@ import { Wrapper, Item } from './Wrapper';
 import update from 'immutability-helper';
 import useAxios from 'axios-hooks';
 import { FormattedMessage } from 'react-intl';
-import MySortableTree from './SortableTree';
+import SortableMenu from './SortableMenu';
 
-const exampleMenu = [
-  {"id":"1","order":0,"name":"Kontakt","parent_id":0,"menu_id":"1"},
-  {"id":"2","order":1,"name":"Pobočky","parent_id":"1","menu_id":"1"},
-  {"id":"3","order":0,"name":"Kudy k nám","parent_id":"1","menu_id":"1"}
-];
+
 
 const menuList = [{id:1, title: 'World'}, {id:2, title: 'Hello'}]
 
-export default function MenuEditor ({ modifiedData, onChange}) {
+export default function MenuEditor ({ MenuIds, onChange}) {
+  const [{ data: getData, loading: getLoading, error: getError }] = useAxios(
+    //TODO: Put URL to fetch menuList for select correct menu === ${menuList}
+    'https://api.myjson.com/bins/820fc'
+  )
+  console.log('GET MENU LIST::' , getData)
   const [activeMenu, setActiveMenu] = useState(null);
 
+  useEffect(() => {
+
+  }, [])
+
   const [
-    { data: postData, loading: postLoading, error: postError },
-    executePost
-  ] = useAxios(
+    { data: postData, loading: postLoading, error: postError },executePost] = useAxios(
     {
       url: 'http://mnovak4:1337/menu-editor/menu',
       method: 'POST'
@@ -36,13 +38,22 @@ export default function MenuEditor ({ modifiedData, onChange}) {
     { manual: true }
   )
 
-  function updateData() {
+  // function updateData(title) {
+  //   executePost({
+  //     data: {
+  //       title: 'ahoj'
+  //     }
+  //   })
+  // }
+
+  const updateData = useCallback ((title) => {
     executePost({
       data: {
-        title: 'ahoj'
+        title: title,
       }
     })
-  }
+    // TODO: do POST request with title
+  }, [])
 
   const changeActiveMenu = useCallback ((e) => {
     setActiveMenu(e.target.value)
@@ -56,8 +67,6 @@ export default function MenuEditor ({ modifiedData, onChange}) {
   // const addNewMenu = useCallback ((e) => {
   // }, [])
 
-
-
   return (
     <Fragment>
       <FormattedMessage id={'menu-editor.MenuEditor.chooseMenu'}>
@@ -67,13 +76,13 @@ export default function MenuEditor ({ modifiedData, onChange}) {
         {menuList.map((menuItem) => <option key={menuItem.id} value={menuItem.title}>{menuItem.title}</option>)}
       </select>
       <br />
-      <button onClick={updateData}>pridat nove menu</button>
-      <div>Vybrane menu je: {activeMenu}</div>
+      <button>pridat nove menu</button>
+      <div>Vybrane menu je: {activeMenu && activeMenu.name}</div>
       <div className="row">
         <div className="col-xs-12 col-md-6">
           <DndProvider backend={HTML5Backend}>
             <ContextProvider>
-              <MySortableTree onChange={onChange} currentMenu={activeMenu} modifiedData={modifiedData}/>
+              <SortableMenu onChange={onChange} menuId={activeMenu && activeMenu.id}/>
             </ContextProvider>
           </DndProvider>
         </div>

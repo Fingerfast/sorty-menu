@@ -15,22 +15,18 @@ const remapSortlyInput = databaseOutput => {
   return databaseOutput.map(row => {
     const {
       id,
-      uuid,
-      parent_uuid = null,
-      menu_uuid,
-      index,
-      name,
-      page_id,
+      parent_id = null,
+      menu_id,
+      order,
+      title,
     } = row;
 
     return {
-      rowid: id,
-      id: uuid,
-      index,
-      name,
-      parentId: parent_uuid,
-      menu_uuid,
-      page_id,
+      id,
+      index: order,
+      name: title,
+      parentId: parent_id,
+      menu_id,
     };
   });
 };

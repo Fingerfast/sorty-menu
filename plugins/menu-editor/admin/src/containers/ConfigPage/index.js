@@ -1,22 +1,9 @@
-/**
- *
- * ConfigPage
- *
- */
-
 import React from 'react';
 import PropTypes from 'prop-types';
 import {connect} from 'react-redux';
 import {bindActionCreators, compose} from 'redux';
-
-// You can find these components in either
-// ./node_modules/strapi-helper-plugin/lib/src
-// or strapi/packages/strapi-helper-plugin/lib/src
 import {ContainerFluid, PluginHeader} from 'strapi-helper-plugin';
-
 import pluginId from '../../pluginId';
-
-// Plugin's components
 import MenuEditor from '../../components/MenuEditor/MenuEditor';
 
 import {getSettings, onCancel, onChange, setErrors, submit} from './actions';
@@ -104,10 +91,10 @@ class ConfigPage extends React.Component {
             />
             <MenuEditor
               didCheckErrors={this.props.didCheckErrors}
-              formErrors={this.props.formErrors}
+              // formErrors={this.props.formErrors}
               initialData={this.props.initialData}
               modifiedData={this.props.modifiedData}
-              currentMenu={this.props.currentMenu}
+              // currentMenu={this.props.currentMenu}
               onChange={this.props.onChange}
               modifiedMenusList={this.props.modifiedMenusList}
             />
