@@ -1,43 +1,31 @@
 {
   "connection": "default",
   "info": {
-    "name": "menus",
+    "name": "menu_item",
     "description": ""
   },
   "attributes": {
-    "uuid": {
-      "type": "string",
-      "required": true,
-      "unique": true,
-      "configurable": true
-    },
-    "index": {
+    "order": {
       "type": "integer",
       "required": true,
       "unique": false,
       "configurable": true
     },
-    "name": {
+    "title": {
       "type": "string",
       "required": true,
       "unique": false,
       "configurable": true
     },
-    "parent_uuid": {
+    "parent_id": {
       "type": "integer",
       "required": true,
       "unique": false,
       "configurable": true
     },
-    "menu_uuid": {
+    "menu_id": {
       "type": "string",
       "required": true,
-      "unique": false,
-      "configurable": false
-    },
-    "page_id": {
-      "type": "string",
-      "required": false,
       "unique": false,
       "configurable": false
     }
