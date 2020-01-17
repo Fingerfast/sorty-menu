@@ -1,8 +1,10 @@
 {
   "ConfigPage.description": "Edit menus here",
   "ConfigPage.title": "Menu - Editor",
-  "EditForm.remove": "Remove",
-  "EditForm.add": "Add",
-  "EditForm.addNewMenu": "Add new menu",
-  "EditForm.chooseMenu": "Choose menu"
+  "MenuEditor.remove": "Remove",
+  "MenuEditor.add": "Add",
+  "MenuEditor.addNewMenu": "Add new menu",
+  "MenuEditor.chooseMenu": "Choose menu",
+  "MenuEditor.editMode": "Edit",
+  "MenuEditor.cancelEditMode": "Cancel"
 }
