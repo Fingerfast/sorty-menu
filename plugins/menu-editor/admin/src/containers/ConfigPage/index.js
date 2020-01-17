@@ -90,11 +90,12 @@ class ConfigPage extends React.Component {
               title={{id: 'menu-editor.ConfigPage.title'}}
             />
             <MenuEditor
-              didCheckErrors={this.props.didCheckErrors}
+              // didCheckErrors={this.props.didCheckErrors}
               // formErrors={this.props.formErrors}
               initialData={this.props.initialData}
-              modifiedData={this.props.modifiedData}
+              // modifiedData={this.props.modifiedData}
               // currentMenu={this.props.currentMenu}
+              editMode={this.state.editMode}
               onChange={this.props.onChange}
               modifiedMenusList={this.props.modifiedMenusList}
             />

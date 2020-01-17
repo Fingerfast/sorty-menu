@@ -7,27 +7,26 @@ import React, {
 import { DndProvider } from 'react-dnd';
 import HTML5Backend from 'react-dnd-html5-backend';
 import { ContextProvider } from 'react-sortly';
-import { Wrapper, Item } from './Wrapper';
 import update from 'immutability-helper';
 import useAxios from 'axios-hooks';
 import { FormattedMessage } from 'react-intl';
 import SortableMenu from './SortableMenu';
+import Select from 'react-select';
+import styled from 'styled-components';
+import MyModal from './Modal';
 
+const MyButton = styled.button`
+  padding: 10px;
+  background: #aed4fb;
+`;
 
-
-const menuList = [{id:1, title: 'World'}, {id:2, title: 'Hello'}]
-
-export default function MenuEditor ({ MenuIds, onChange}) {
-  const [{ data: getData, loading: getLoading, error: getError }] = useAxios(
+export default function MenuEditor ({ onChange, editMode}) {
+  const [{ data: menuList, loading: menuListLoading, error: menuListError }] = useAxios(
     //TODO: Put URL to fetch menuList for select correct menu === ${menuList}
-    'https://api.myjson.com/bins/820fc'
+    'http://localhost:1337/menu-editor/menu'
   )
-  console.log('GET MENU LIST::' , getData)
   const [activeMenu, setActiveMenu] = useState(null);
-
-  useEffect(() => {
-
-  }, [])
+  const [activeModal, setActiveModal] = useState(false);
 
   const [
     { data: postData, loading: postLoading, error: postError },executePost] = useAxios(
@@ -55,34 +54,69 @@ export default function MenuEditor ({ MenuIds, onChange}) {
     // TODO: do POST request with title
   }, [])
 
+
   const changeActiveMenu = useCallback ((e) => {
-    setActiveMenu(e.target.value)
-    let menuId = menuList.filter(menuItem => menuItem.title === e.target.value)[0].id
+    console.log('EEE' , e)
+    setActiveMenu(e)
+    // let menuId = menuList.filter(menuItem => menuItem.title === e.target.value)[0].id
     // TODO: do get request with id to fetch details of selected menu
   }, [])
 
-  // const [{ data: sourceData, loading, error }, exe] = useAxios(
-  //   'http://localhost:1337/categories'
-  // );
-  // const addNewMenu = useCallback ((e) => {
-  // }, [])
+  const addMenuClick = useCallback((active) => (e) => {
+    e.preventDefault()
+    console.log('ACTIVE' , active)
+    setActiveModal(active);
+  }, [])
 
+  const colourStyles = {
+    control: styles => ({ ...styles, backgroundColor: 'white' }),
+    option: (styles, { data, isDisabled, isFocused, isSelected }) => {;
+      return {
+        ...styles,
+        backgroundColor: isDisabled
+          ? null
+          : isSelected
+            ? data.color
+            : isFocused
+              ? '#007bff'
+              : null,
+        cursor: isDisabled ? 'not-allowed' : 'default',
+        color: 'black',
+        ':active': {
+          ...styles[':active'],
+          backgroundColor: !isDisabled && (isSelected ? 'white' : 'blue'),
+        },
+      };
+    },
+  };
   return (
     <Fragment>
       <FormattedMessage id={'menu-editor.MenuEditor.chooseMenu'}>
         {message => <option value={''}>{message}</option>}
       </FormattedMessage>
-      <select onChange={changeActiveMenu}>
-        {menuList.map((menuItem) => <option key={menuItem.id} value={menuItem.title}>{menuItem.title}</option>)}
-      </select>
+      <Select
+        className="basic-single"
+        classNamePrefix="select"
+        isLoading={false}
+        isSearchable={true}
+        onChange={changeActiveMenu}
+        styles={colourStyles}
+        options={menuList && menuList.map((menu) => {
+          return {
+            label: menu.title,
+            id: menu.id,
+          }
+        })}
+      />
       <br />
-      <button>pridat nove menu</button>
+      <MyButton onClick={addMenuClick(true)}>Přidat menu</MyButton>
+      <MyModal activated={activeModal} setActivated={setActiveModal}/>
       <div>Vybrane menu je: {activeMenu && activeMenu.name}</div>
       <div className="row">
         <div className="col-xs-12 col-md-6">
           <DndProvider backend={HTML5Backend}>
             <ContextProvider>
-              <SortableMenu onChange={onChange} menuId={activeMenu && activeMenu.id}/>
+              <SortableMenu editMode={editMode} onChange={onChange} menuId={activeMenu && activeMenu.id}/>
             </ContextProvider>
           </DndProvider>
         </div>

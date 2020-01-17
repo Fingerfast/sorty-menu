@@ -14,10 +14,10 @@ const SortableTreeItem = props => {
     defaultValue
   } = props;
 
-  const [value, setValue] = useState(name)
-  const [debouncedCallback] = useDebouncedCallback((value) => {
-    setValue(value)
-  }, 300)
+  // const [value, setValue] = useState(name)
+  // const [debouncedCallback] = useDebouncedCallback((value) => {
+  //   setValue(value)
+  // }, 200)
 
   const ref = React.useRef(null);
 
@@ -32,7 +32,8 @@ const SortableTreeItem = props => {
   return (
     <Item ref={ref} style={{ marginLeft: depth * 20 }} key={id}>
       {/* InputText prop `name` sets ID and NAME without possibility to override it */}
-      <input value={name} name="name" onChange={(e) => debouncedCallback(e.target.value)}  />
+      <input value={name} name="name" onChange={handleChangeRow} />
+      {/*<input value={name} name="name" onChange={(e) => debouncedCallback(e.target.value)}  />*/}
       <button kind="secondary" onClick={() => handleDelete(id)}>
         {''}
         <FormattedMessage id={'menu-editor.MenuEditor.remove'} />
