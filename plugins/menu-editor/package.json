@@ -14,6 +14,8 @@
     "nanoid": "^2.1.8",
     "react-dnd": "^9.4.0",
     "react-dnd-html5-backend": "^9.4.0",
+    "react-modal": "^3.11.1",
+    "react-select": "^3.0.8",
     "react-sortly": "^2.0.4",
     "use-debounce": "^3.1.0"
   },
