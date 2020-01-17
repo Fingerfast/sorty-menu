@@ -20,7 +20,7 @@ module.exports = {
         .queries(Menu)
         .getMenuList();
 
-      ctx.body = menusList;
+      ctx.body = menusList.serialize();
     } catch (error) {
       console.log('getMenusList error:', error);
       ctx.send(
@@ -64,7 +64,8 @@ module.exports = {
         .queries(MenuItem)
         .getMenuById({menu_id})
 
-      ctx.body = menu;
+        console.log(menu.serialize())
+      ctx.body = menu.serialize();
     } catch (error) {
       console.log('getMenuById error:', error);
       ctx.send(
