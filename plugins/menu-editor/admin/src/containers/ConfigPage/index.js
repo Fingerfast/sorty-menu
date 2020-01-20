@@ -94,7 +94,7 @@ ConfigPage.propTypes = {
   onChange: PropTypes.func.isRequired,
   setErrors: PropTypes.func.isRequired,
   submit: PropTypes.func.isRequired,
-  submitSuccess: PropTypes.bool.isRequired,
+  // submitSuccess: PropTypes.bool.isRequired,
 };
 
 function mapDispatchToProps(dispatch) {
