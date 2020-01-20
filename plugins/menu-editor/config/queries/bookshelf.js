@@ -17,7 +17,6 @@ module.exports = model => ({
 
         await trx.commit;
       } catch (error) {
-        console.log(error)
         await trx.rollback;
       }
     });
