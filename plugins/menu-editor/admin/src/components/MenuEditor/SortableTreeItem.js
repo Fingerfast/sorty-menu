@@ -1,42 +1,50 @@
 import React, {useState} from "react";
-import {Item} from "./Wrapper";
 import PropTypes from "prop-types";
 import { FormattedMessage } from 'react-intl';
+import styled from 'styled-components';
 import { useDebouncedCallback } from 'use-debounce';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import {
+  faPlus,
+  faTrash,
+  faBaseballBall,
+} from '@fortawesome/free-solid-svg-icons';
 
-const SortableTreeItem = props => {
-  console.log('PROPS:' , props)
-  const {
-    data: { id, name, depth },
-    drag,
-    drop,
-    handleDelete,
-    handleChangeRow,
-  } = props;
+const Item = styled.div`
+  display: flex;
+  cursor: move;
+  flex: 1 0 auto;
+  border: dashed 1px #e2e2e2;
+  border-image: initial;
+  padding: 15px;
+  background: rgb(255, 255, 255);
+`;
 
+const Button = styled.button`
+  cursor: move;
+`;
+
+const Input = styled.input`
+  flex: 1 0 auto;
+`;
+
+export default function SortableTreeItem ({data: { id, name, depth }, drag, drop, handleDelete, handleChangeRow, menuItems}) {
   // const [value, setValue] = useState(name)
   // const [debouncedCallback] = useDebouncedCallback((value) => {
   //   setValue(value)
   // }, 200)
-
   const ref = React.useRef(null);
-
   drag(drop(ref));
-
-  // const handleChangeInput = e => {
-  //   e.preventDefault();
-  //   const { target } = e;
-  //   handleChangeRow(id, target);
-  // };
 
   return (
     <Item ref={ref} style={{ marginLeft: depth * 20 }} key={id}>
       {/* InputText prop `name` sets ID and NAME without possibility to override it */}
-      <input key={id} value={name} name="name" onChange={handleChangeRow(id)} />
+      <Input key={id} value={name} name="name" onChange={handleChangeRow(id, menuItems)} />
       {/*<input value={name} name="name" onChange={(e) => debouncedCallback(e.target.value)}  />*/}
-      <button kind="secondary" onClick={() => handleDelete(id)}>
-        <FormattedMessage id={'menu-editor.MenuEditor.remove'} />
-      </button>
+      <Button kind="primary" onClick={handleDelete(id, menuItems)}><FontAwesomeIcon icon={faTrash} /></Button>
+      {/*<button kind="secondary" onClick={() => handleDelete(id)}>*/}
+      {/*  <FormattedMessage id={'menu-editor.MenuEditor.remove'} />*/}
+      {/*</button>*/}
     </Item>
   );
 };
@@ -48,5 +56,3 @@ SortableTreeItem.propTypes = {
   handleDelete: PropTypes.func.isRequired,
   handleChangeRow: PropTypes.func.isRequired,
 };
-
-export default SortableTreeItem;

@@ -16,7 +16,6 @@ export function getMenu() {
 }
 
 export function getMenuSucceeded({ initialData }) {
-  console.log('INITIAL MENU-------' , initialData)
   return {
     type: GET_MENU_SUCCEEDED,
     initialData,
@@ -58,7 +57,6 @@ export function submitError(errors) {
 }
 
 export function submitSucceeded(data) {
-  console.log('----------', data)
   return {
     type: SUBMIT_SUCCEEDED,
     data,
