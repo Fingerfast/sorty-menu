@@ -13,7 +13,7 @@ import {
 const initialState = fromJS({
   didCheckErrors: false,
   formErrors: List([]),
-  initialData: [],
+  initialData: [{id: 1, name: 'ruda', depth: 0},{id: 2, name: 'honza', depth: 0}],
   modifiedData: [],
   submitSuccess: false,
 });
