@@ -41,15 +41,16 @@ module.exports = {
     const SourceMenu = strapi.plugins['menu-editor'].models.source_menu
 
     try {
-      const response = await strapi.plugins['menu-editor'].config
-      .queries(SourceMenu)
-      .putSourceMenu(menu_items)
+      await strapi.plugins['menu-editor'].config
+        .queries(SourceMenu)
+        .putSourceMenu(menu_items)
 
-      ctx.body = response.map(({uuid, depth_order, parent_uuid}) => ({
-        uuid,
-        depth_order,
-        parent_uuid,
-      }));
+      ctx.send(
+        {
+          message: 'OK',
+        },
+        201
+      );
     } catch (error) {
       console.log('putMenuById error:', JSON.stringify(error));
       ctx.send(
