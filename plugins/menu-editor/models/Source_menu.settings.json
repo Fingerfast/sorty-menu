@@ -21,7 +21,7 @@
     },
     "parent_uuid": {
       "type": "string",
-      "required": true,
+      "required": false,
       "unique": false,
       "configurable": true
     }
