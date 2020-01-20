@@ -5,13 +5,15 @@ import { FormattedMessage } from 'react-intl';
 import { useDebouncedCallback } from 'use-debounce';
 
 const SortableTreeItem = props => {
+  console.log('PROPS:' , props)
   const {
     data: { id, name, depth },
     drag,
     drop,
     handleDelete,
     handleChangeRow,
-    defaultValue
+    defaultValue,
+    sortlyData
   } = props;
 
   // const [value, setValue] = useState(name)
@@ -30,9 +32,9 @@ const SortableTreeItem = props => {
   // };
 
   return (
-    <Item ref={ref} style={{ marginLeft: depth * 20 }} key={id}>
+    <Item ref={ref} style={{ marginLeft: depth * 20 }} key={id+'2'}>
       {/* InputText prop `name` sets ID and NAME without possibility to override it */}
-      <input value={name} name="name" onChange={handleChangeRow} />
+      <input key={id} value={name} name="name" onChange={handleChangeRow(id, sortlyData)} />
       {/*<input value={name} name="name" onChange={(e) => debouncedCallback(e.target.value)}  />*/}
       <button kind="secondary" onClick={() => handleDelete(id)}>
         {''}

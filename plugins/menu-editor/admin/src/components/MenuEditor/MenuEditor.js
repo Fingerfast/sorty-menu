@@ -1,13 +1,11 @@
 import React, {
-  Fragment,
   useState,
   useCallback,
-  useEffect,
 } from 'react';
 import { DndProvider } from 'react-dnd';
 import HTML5Backend from 'react-dnd-html5-backend';
 import { ContextProvider } from 'react-sortly';
-import update from 'immutability-helper';
+// import update from 'immutability-helper';
 import useAxios from 'axios-hooks';
 import { FormattedMessage } from 'react-intl';
 import SortableMenu from './SortableMenu';
@@ -15,51 +13,45 @@ import Select from 'react-select';
 import styled from 'styled-components';
 import MyModal from './Modal';
 
-const MyButton = styled.button`
+
+const Wrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+`;
+const ActionsMenu = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: space-evenly;
+`;
+const TitleInput = styled.input`
   padding: 10px;
-  background: #aed4fb;
+  box-sizing: border-box;
+  background-color: ${props => !props.editMode ? 'none' : '#aed4fb'};
+  border: ${props => props.editMode ? '1px solid #aed4fb' : 'none'}
 `;
 
-export default function MenuEditor ({ onChange, editMode}) {
+const MyButton = styled.button`
+  //align-items: center;
+  flex: 0 1 auto;
+  padding: 10px;
+  background: ${props => props.disabled ? '#B0AAB3' : '#aed4fb'};
+`;
+
+export default function MenuEditor ({ onChange, editMode, initialData, modifiedData, currentMenu}) {
   const [{ data: menuList, loading: menuListLoading, error: menuListError }] = useAxios(
     //TODO: Put URL to fetch menuList for select correct menu === ${menuList}
     'http://localhost:1337/menu-editor/menu'
   )
+  console.log('INITIAL DATA::' , initialData)
+  console.log('MODIFIED DATA::' , modifiedData)
+  console.log('CURRENT DATA::' , currentMenu)
   const [activeMenu, setActiveMenu] = useState(null);
   const [activeModal, setActiveModal] = useState(false);
-
-  const [
-    { data: postData, loading: postLoading, error: postError },executePost] = useAxios(
-    {
-      url: 'http://mnovak4:1337/menu-editor/menu',
-      method: 'POST'
-    },
-    { manual: true }
-  )
-
-  // function updateData(title) {
-  //   executePost({
-  //     data: {
-  //       title: 'ahoj'
-  //     }
-  //   })
-  // }
-
-  const updateData = useCallback ((title) => {
-    executePost({
-      data: {
-        title: title,
-      }
-    })
-    // TODO: do POST request with title
-  }, [])
-
+  console.log('MENU EDITOR:::' , menuList, menuListLoading, menuListError, activeMenu)
 
   const changeActiveMenu = useCallback ((e) => {
-    console.log('EEE' , e)
-    setActiveMenu(e)
-    // let menuId = menuList.filter(menuItem => menuItem.title === e.target.value)[0].id
-    // TODO: do get request with id to fetch details of selected menu
+    // setActiveMenu(e)
+    // onChange({})
   }, [])
 
   const addMenuClick = useCallback((active) => (e) => {
@@ -90,10 +82,20 @@ export default function MenuEditor ({ onChange, editMode}) {
     },
   };
   return (
-    <Fragment>
-      <FormattedMessage id={'menu-editor.MenuEditor.chooseMenu'}>
-        {message => <option value={''}>{message}</option>}
-      </FormattedMessage>
+    <Wrapper>
+      <ActionsMenu>
+        <MyButton onClick={addMenuClick(true)}>
+          <FormattedMessage id={'menu-editor.MenuEditor.addNewMenu'}>
+            {message => <option value={''}>{message}</option>}
+          </FormattedMessage>
+        </MyButton>
+        {/*{activeMenu &&*/}
+        {/*  <FormattedMessage id={editMode ? 'menu-editor.ConfigPage.description' : 'menu-editor.ConfigPage.switchToEditMode'}>*/}
+        {/*      {message => <MyButton title={message} disabled={!editMode} onClick={addMenuClick(true)}>{message}</MyButton>}*/}
+        {/*  </FormattedMessage>*/}
+        {/*}*/}
+      </ActionsMenu>
+      <MyModal activated={activeModal} setActivated={setActiveModal}/>
       <Select
         className="basic-single"
         classNamePrefix="select"
@@ -108,10 +110,11 @@ export default function MenuEditor ({ onChange, editMode}) {
           }
         })}
       />
-      <br />
-      <MyButton onClick={addMenuClick(true)}>Přidat menu</MyButton>
-      <MyModal activated={activeModal} setActivated={setActiveModal}/>
-      <div>Vybrane menu je: {activeMenu && activeMenu.name}</div>
+
+      <FormattedMessage id={'menu-editor.MenuEditor.chooseMenu'}>
+        {message => (<TitleInput value={activeMenu && activeMenu.label || ''} disabled={!editMode} onChange={() => {}} editMode={editMode}/>)}
+      </FormattedMessage>
+
       <div className="row">
         <div className="col-xs-12 col-md-6">
           <DndProvider backend={HTML5Backend}>
@@ -121,7 +124,7 @@ export default function MenuEditor ({ onChange, editMode}) {
           </DndProvider>
         </div>
       </div>
-    </Fragment>
+    </Wrapper>
   );
 };
 

@@ -1,8 +1,8 @@
 // import { LOCATION_CHANGE } from 'react-router-redux';
 import { call, fork, put, select, takeLatest } from 'redux-saga/effects';
 import { request } from 'strapi-helper-plugin';
-import { getSettingsSucceeded, getSettings } from './actions';
-import { GET_SETTINGS, SUBMIT } from './constants';
+import { getSettingsSucceeded, getSettings, getMenus, getMenusSucceeded } from './actions';
+import { GET_SETTINGS, SUBMIT, GET_MENUS } from './constants';
 import {
   makeSelectModifiedData,
   makeSelectCurrentMenu,
@@ -49,44 +49,31 @@ const remapSortlyOutput = sortlyOutput => {
 
 export function* settingsGet() {
   try {
-    const menusListResponse = yield call(request, `/${pluginId}/list-menus`, {
+    const currentMenuId = yield select(makeSelectCurrentMenu());
+    const {menuList} = yield call(request, `/${pluginId}/${currentMenuId}`, {
       method: 'GET',
     });
-    const initialMenusList = menusListResponse.map(item => item['menu_uuid']);
-
-    const currentMenu = yield select(makeSelectCurrentMenu());
-
-    const isCurrentMenuInDatabase = Boolean(
-      initialMenusList.find(item => item === currentMenu)
+    yield put(
+      getSettingsSucceeded({
+        initialData: convert(remapSortlyInput(menuList)),
+      })
     );
+  } catch (err) {
+    strapi.notification.error('notification.error');
+  }
+}
 
-    const initialDataRequest = {
-      url: `/${pluginId}`,
-      params: {
-        menu_uuid: currentMenu,
-      },
-    };
+export function* menusGet() {
+  try {
+    const menus = yield call(request, `/${pluginId}/menu`, {
+      method: 'GET',
+    });
 
-    //If its in database, fetch it
-    if (currentMenu === null || isCurrentMenuInDatabase) {
-      const initialDataResponse = yield call(request, initialDataRequest.url, {
-        method: 'GET',
-        params: initialDataRequest.params,
-      });
-
-      yield put(
-        getSettingsSucceeded({
-          initialData: convert(remapSortlyInput(initialDataResponse)),
-          initialMenusList,
-        })
-      );
-    } else {
-      yield put(
-        getSettingsSucceeded({
-          initialData: [],
-        })
-      );
-    }
+    yield put(
+      getMenusSucceeded({
+        initialMenus: menus,
+      })
+    );
   } catch (err) {
     strapi.notification.error('notification.error');
   }
@@ -131,6 +118,7 @@ export function* submit() {
 
 function* defaultSaga() {
   yield fork(takeLatest, GET_SETTINGS, settingsGet);
+  yield fork(takeLatest, GET_MENUS, menusGet);
   yield fork(takeLatest, SUBMIT, submit);
 }
 

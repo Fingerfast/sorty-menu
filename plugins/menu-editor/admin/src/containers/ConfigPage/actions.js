@@ -14,6 +14,8 @@ import {
   SUBMIT,
   SUBMIT_ERROR,
   SUBMIT_SUCCEEDED,
+  GET_MENUS,
+  GET_MENUS_SUCCEEDED,
 } from './constants';
 
 export function getSettings() {
@@ -22,11 +24,24 @@ export function getSettings() {
   };
 }
 
-export function getSettingsSucceeded({ initialData, initialMenusList }) {
+export function getSettingsSucceeded({ initialData }) {
+  console.log('INITIAL DATA-------' , initialData)
   return {
     type: GET_SETTINGS_SUCCEEDED,
     initialData,
-    initialMenusList,
+  };
+}
+export function getMenus() {
+  return {
+    type: GET_MENUS,
+  };
+}
+
+export function getMenusSucceeded({ initialMenus }) {
+  console.log('INITIAL MENU-------' , initialMenus)
+  return {
+    type: GET_MENUS_SUCCEEDED,
+    initialMenus,
   };
 }
 
