@@ -8,6 +8,8 @@ import { fromJS, List } from 'immutable';
 
 import {
   CREATE_MENU,
+  GET_MENUS,
+  GET_MENUS_SUCCEEDED,
   GET_SETTINGS,
   GET_SETTINGS_SUCCEEDED,
   ON_CANCEL,
@@ -20,47 +22,48 @@ import {
 const initialState = fromJS({
   didCheckErrors: false,
   formErrors: List([]),
-  initialData: [
-    {"id":"1","order":0,"name":"Kontakt","parent_id":0,"menu_id":"1"},
-    {"id":"2","order":1,"name":"Pobočky","parent_id":"1","menu_id":"1"},
-    {"id":"3","order":0,"name":"Kudy k nám","parent_id":"1","menu_id":"1"}],
+  initialData: [],
   modifiedData: [],
-  settings: [],
+  // settings: [],
   currentMenu: null,
-  initialMenusList: [],
-  modifiedMenusList: [],
+  initialMenus: [],
+  // modifiedMenusList: [],
   submitSuccess: false,
 });
 
 function configPageReducer(state = initialState, action) {
   switch (action.type) {
     case CREATE_MENU:
-      return state;
+    case GET_MENUS:
     case GET_SETTINGS:
       return state;
+    case GET_MENUS_SUCCEEDED:
+      return (
+        state
+          .update('initialMenus', () => action.initialMenus)
+      );
     case GET_SETTINGS_SUCCEEDED:
       console.log('GET_SETTINGS_SUCCEEDED', action);
       return (
         state
           //.update('didCheckErrors', v => (v = !v))
           //.update('formErrors', () => List([]))
-          .update('initialMenusList', () => action.initialMenusList)
-          .update('modifiedMenusList', () => action.initialMenusList)
+          // .update('initialMenus', () => action.initialMenus)
+          // .update('modifiedMenusList', () => action.initialMenus)
           .update('initialData', () => action.initialData)
-          .update('modifiedData', () => action.initialData)
       );
     case ON_CANCEL:
       return (
         state
           //.update('didCheckErrors', v => (v = !v))
           //.update('formErrors', () => List([]))
-          .update('modifiedData', () => state.get('initialData'))
-          .update('modifiedMenusList', () => state.get('initialMenusList'))
+          .update('modifiedData', () => [])
+          // .update('modifiedMenusList', () => state.get('initialMenus'))
       );
     case ON_CHANGE:
       console.group('ON_CHANGE:');
-      console.log('action', action);
-      console.log('state:', state);
+      // console.log('action', action);
+      // console.log('state:', state);
       console.groupEnd();
 
       return state.update(action.key, () => action.value);
@@ -74,9 +77,9 @@ function configPageReducer(state = initialState, action) {
         state
           //.update('didCheckErrors', v => (v = !v))
           //.update('formErrors', () => List([]))
+          .update('initialData', () => action.data)
           //.update('initialData', () => action.data)
-          //.update('initialData', () => action.data)
-          //.update('modifiedData', () => [])
+          .update('modifiedData', () => [])
           //.update('menusList', () => action.menusList)
           .update('submitSuccess', v => (v = !v))
       );
