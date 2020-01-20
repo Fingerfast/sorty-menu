@@ -1,6 +1,7 @@
 import Modal from "react-modal";
-import React, {useState} from "react";
+import React, {useCallback, useState} from "react";
 import styled from 'styled-components';
+import useAxios from "axios-hooks";
 
 const customStyles = {
   content : {
@@ -22,7 +23,24 @@ const MyButton = styled.button`
 `;
 
 export default function MyModal ({activated, setActivated}) {
-  console.log('ACTIVAE' , activated)
+  const [title, setTitle] = useState('')
+  // const [
+  //   { data: postData, loading: postLoading, error: postError }, executePost] = useAxios(
+  //   {
+  //     url: 'http://mnovak4:1337/menu-editor/menu',
+  //     method: 'POST'
+  //   },
+  //   { manual: true }
+  // )
+  // const updateData = useCallback ((title) => {
+  //   executePost({
+  //     data: {
+  //       title: title,
+  //     }
+  //   })
+  //   // TODO: do POST request with title
+  // }, [])
+
   return (
     <Modal
       isOpen={activated}

@@ -14,3 +14,7 @@ export const SET_ERRORS = 'menu-editor/ConfigPage/SET_ERRORS';
 export const SUBMIT = 'menu-editor/ConfigPage/SUBMIT';
 export const SUBMIT_ERROR = 'menu-editor/ConfigPage/SUBMIT_ERROR';
 export const SUBMIT_SUCCEEDED = 'menu-editor/ConfigPage/SUBMIT_SUCCEEDED';
+export const GET_MENUS = 'menu-editor/ConfigPage/GET_MENUS';
+export const GET_MENUS_SUCCEEDED = 'menu-editor/ConfigPage/GET_MENUS_SUCCEEDED';
+
+

@@ -6,7 +6,7 @@ import {ContainerFluid, PluginHeader} from 'strapi-helper-plugin';
 import pluginId from '../../pluginId';
 import MenuEditor from '../../components/MenuEditor/MenuEditor';
 
-import {getSettings, onCancel, onChange, setErrors, submit} from './actions';
+import { onCancel, onChange, setErrors, submit, getMenus} from './actions';
 
 import reducer from './reducer';
 import saga from './saga';
@@ -20,13 +20,13 @@ class ConfigPage extends React.Component {
     };
   }
   componentDidMount() {
-    this.getSettings();
+    this.getMenus();
   }
 
   componentDidUpdate(prevProps) {
     if (prevProps.currentMenu !== this.props.currentMenu) {
       //Is currently selected menu already in database or is it all new menu?
-      this.getSettings();
+      this.getMenus();
     }
   }
 
@@ -35,8 +35,8 @@ class ConfigPage extends React.Component {
    * @param  {Object} props
    * @return {Func}       calls the saga that gets the current settings
    */
-  getSettings = () => {
-    this.props.getSettings();
+  getMenus = () => {
+    this.props.getMenus();
   };
 
   handleSubmit = e => {
@@ -79,7 +79,7 @@ class ConfigPage extends React.Component {
   ]
 
   render() {
-    // console.log('this state:::' , this.state)
+    console.log('this state:::' , this.state)
     return (
       <div>
         <form onSubmit={this.handleSubmit}>
@@ -93,8 +93,8 @@ class ConfigPage extends React.Component {
               // didCheckErrors={this.props.didCheckErrors}
               // formErrors={this.props.formErrors}
               initialData={this.props.initialData}
-              // modifiedData={this.props.modifiedData}
-              // currentMenu={this.props.currentMenu}
+              modifiedData={this.props.modifiedData}
+              currentMenu={this.props.currentMenu}
               editMode={this.state.editMode}
               onChange={this.props.onChange}
               modifiedMenusList={this.props.modifiedMenusList}
@@ -122,7 +122,7 @@ ConfigPage.propTypes = {
   appEnvironments: PropTypes.array,
   didCheckErrors: PropTypes.bool.isRequired,
   formErrors: PropTypes.array,
-  getSettings: PropTypes.func.isRequired,
+  getMenus: PropTypes.func.isRequired,
   history: PropTypes.object.isRequired,
   match: PropTypes.object.isRequired,
   initialData: PropTypes.array.isRequired,
@@ -140,7 +140,7 @@ ConfigPage.propTypes = {
 function mapDispatchToProps(dispatch) {
   return bindActionCreators(
     {
-      getSettings,
+      getMenus,
       onCancel,
       onChange,
       setErrors,
