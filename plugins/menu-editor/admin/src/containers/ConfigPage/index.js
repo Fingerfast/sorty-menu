@@ -5,9 +5,7 @@ import {bindActionCreators, compose} from 'redux';
 import {ContainerFluid, PluginHeader} from 'strapi-helper-plugin';
 import pluginId from '../../pluginId';
 import MenuEditor from '../../components/MenuEditor/MenuEditor';
-
-import { onCancel, onChange, setErrors, submit, getMenus} from './actions';
-
+import { onCancel, onChange, setErrors, submit, getMenu} from './actions';
 import reducer from './reducer';
 import saga from './saga';
 import selectConfigPage from './selectors';
@@ -20,38 +18,16 @@ class ConfigPage extends React.Component {
     };
   }
   componentDidMount() {
-    this.getMenus();
+    this.getMenu();
   }
 
-  componentDidUpdate(prevProps) {
-    if (prevProps.currentMenu !== this.props.currentMenu) {
-      //Is currently selected menu already in database or is it all new menu?
-      this.getMenus();
-    }
-  }
-
-  /**
-   * Get Settings depending on the props
-   * @param  {Object} props
-   * @return {Func}       calls the saga that gets the current settings
-   */
-  getMenus = () => {
-    this.props.getMenus();
+  getMenu = () => {
+    this.props.getMenu();
   };
 
   handleSubmit = e => {
     e.preventDefault();
-
     return this.props.submit();
-  };
-
-
-
-  setMenus = newMenusList => {
-    this.setState(prevState => ({
-      ...prevState,
-      menusList: [...prevState.menusList, newMenusList],
-    }));
   };
 
   pluginHeaderActions = [
@@ -68,7 +44,6 @@ class ConfigPage extends React.Component {
       type: 'submit',
     },
   ];
-
   actionEdit = [
     {
       kind: 'secondary',
@@ -79,7 +54,6 @@ class ConfigPage extends React.Component {
   ]
 
   render() {
-    console.log('this state:::' , this.state)
     return (
       <div>
         <form onSubmit={this.handleSubmit}>
@@ -90,14 +64,11 @@ class ConfigPage extends React.Component {
               title={{id: 'menu-editor.ConfigPage.title'}}
             />
             <MenuEditor
-              // didCheckErrors={this.props.didCheckErrors}
-              // formErrors={this.props.formErrors}
               initialData={this.props.initialData}
               modifiedData={this.props.modifiedData}
               currentMenu={this.props.currentMenu}
               editMode={this.state.editMode}
               onChange={this.props.onChange}
-              modifiedMenusList={this.props.modifiedMenusList}
             />
           </ContainerFluid>
         </form>
@@ -109,22 +80,15 @@ class ConfigPage extends React.Component {
 ConfigPage.defaultProps = {
   appEnvironments: [],
   formErrors: [],
-  settings: [],
   initialData: [],
   modifiedData: [],
-  menusList: [],
-  initialMenusList: [],
-  modifiedMenusList: [],
-  currentMenu: null,
 };
 
 ConfigPage.propTypes = {
   appEnvironments: PropTypes.array,
   didCheckErrors: PropTypes.bool.isRequired,
   formErrors: PropTypes.array,
-  getMenus: PropTypes.func.isRequired,
-  history: PropTypes.object.isRequired,
-  match: PropTypes.object.isRequired,
+  getMenu: PropTypes.func.isRequired,
   initialData: PropTypes.array.isRequired,
   modifiedData: PropTypes.array.isRequired,
   onCancel: PropTypes.func.isRequired,
@@ -132,15 +96,12 @@ ConfigPage.propTypes = {
   setErrors: PropTypes.func.isRequired,
   submit: PropTypes.func.isRequired,
   submitSuccess: PropTypes.bool.isRequired,
-  currentMenu: PropTypes.string,
-  initialMenusList: PropTypes.array,
-  modifiedMenusList: PropTypes.array,
 };
 
 function mapDispatchToProps(dispatch) {
   return bindActionCreators(
     {
-      getMenus,
+      getMenu,
       onCancel,
       onChange,
       setErrors,

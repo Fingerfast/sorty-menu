@@ -1,47 +1,25 @@
-/**
- *
- *
- * ConfigPage actions
- *
- */
-
 import {
-  GET_SETTINGS,
-  GET_SETTINGS_SUCCEEDED,
   ON_CANCEL,
   ON_CHANGE,
   SET_ERRORS,
   SUBMIT,
   SUBMIT_ERROR,
   SUBMIT_SUCCEEDED,
-  GET_MENUS,
-  GET_MENUS_SUCCEEDED,
+  GET_MENU,
+  GET_MENU_SUCCEEDED,
 } from './constants';
 
-export function getSettings() {
+export function getMenu() {
   return {
-    type: GET_SETTINGS,
+    type: GET_MENU,
   };
 }
 
-export function getSettingsSucceeded({ initialData }) {
-  console.log('INITIAL DATA-------' , initialData)
+export function getMenuSucceeded({ initialData }) {
+  console.log('INITIAL MENU-------' , initialData)
   return {
-    type: GET_SETTINGS_SUCCEEDED,
+    type: GET_MENU_SUCCEEDED,
     initialData,
-  };
-}
-export function getMenus() {
-  return {
-    type: GET_MENUS,
-  };
-}
-
-export function getMenusSucceeded({ initialMenus }) {
-  console.log('INITIAL MENU-------' , initialMenus)
-  return {
-    type: GET_MENUS_SUCCEEDED,
-    initialMenus,
   };
 }
 

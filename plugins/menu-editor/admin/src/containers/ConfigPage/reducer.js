@@ -1,17 +1,8 @@
-/**
- *
- * ConfigPage reducer
- *
- */
-
 import { fromJS, List } from 'immutable';
 
 import {
-  CREATE_MENU,
-  GET_MENUS,
-  GET_MENUS_SUCCEEDED,
-  GET_SETTINGS,
-  GET_SETTINGS_SUCCEEDED,
+  GET_MENU,
+  GET_MENU_SUCCEEDED,
   ON_CANCEL,
   ON_CHANGE,
   //SET_ERRORS,
@@ -24,26 +15,15 @@ const initialState = fromJS({
   formErrors: List([]),
   initialData: [],
   modifiedData: [],
-  // settings: [],
-  currentMenu: null,
-  initialMenus: [],
-  // modifiedMenusList: [],
   submitSuccess: false,
 });
 
 function configPageReducer(state = initialState, action) {
   switch (action.type) {
-    case CREATE_MENU:
-    case GET_MENUS:
-    case GET_SETTINGS:
+    case GET_MENU:
       return state;
-    case GET_MENUS_SUCCEEDED:
-      return (
-        state
-          .update('initialMenus', () => action.initialMenus)
-      );
-    case GET_SETTINGS_SUCCEEDED:
-      console.log('GET_SETTINGS_SUCCEEDED', action);
+    case GET_MENU_SUCCEEDED:
+      console.log('GET_MENU_SUCCEEDED', action);
       return (
         state
           //.update('didCheckErrors', v => (v = !v))
@@ -61,11 +41,6 @@ function configPageReducer(state = initialState, action) {
           // .update('modifiedMenusList', () => state.get('initialMenus'))
       );
     case ON_CHANGE:
-      console.group('ON_CHANGE:');
-      // console.log('action', action);
-      // console.log('state:', state);
-      console.groupEnd();
-
       return state.update(action.key, () => action.value);
     //case SET_ERRORS:
     //case SUBMIT_ERROR:
