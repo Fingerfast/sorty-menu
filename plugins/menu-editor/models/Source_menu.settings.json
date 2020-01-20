@@ -1,33 +1,29 @@
 {
   "connection": "default",
   "info": {
-    "name": "menu_item",
+    "idAttribute": "uuid",
+    "idAttributeType": "uuid",
+    "name": "source_menu",
     "description": ""
   },
   "attributes": {
-    "order": {
+    "uuid": {
+      "type": "string",
+      "required": true,
+      "unique": true,
+      "configurable": true
+    },
+    "depth_order": {
       "type": "integer",
       "required": true,
       "unique": false,
       "configurable": true
     },
-    "title": {
+    "parent_uuid": {
       "type": "string",
       "required": true,
       "unique": false,
       "configurable": true
-    },
-    "parent_id": {
-      "type": "integer",
-      "required": true,
-      "unique": false,
-      "configurable": true
-    },
-    "menu_id": {
-      "type": "string",
-      "required": true,
-      "unique": false,
-      "configurable": false
     }
   }
 }
