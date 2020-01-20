@@ -59,14 +59,13 @@ class ConfigPage extends React.Component {
         <form onSubmit={this.handleSubmit}>
           <ContainerFluid>
             <PluginHeader
-              actions={this.state.editMode ? this.pluginHeaderActions : this.actionEdit}
-              description={{id: 'menu-editor.ConfigPage.description'}}
               title={{id: 'menu-editor.ConfigPage.title'}}
+              description={{id: 'menu-editor.ConfigPage.description'}}
+              actions={this.state.editMode ? this.pluginHeaderActions : this.actionEdit}
             />
             <MenuEditor
-              initialData={this.props.initialData}
+              menuItems={this.props.initialData}
               modifiedData={this.props.modifiedData}
-              currentMenu={this.props.currentMenu}
               editMode={this.state.editMode}
               onChange={this.props.onChange}
             />
@@ -81,7 +80,7 @@ ConfigPage.defaultProps = {
   appEnvironments: [],
   formErrors: [],
   initialData: [],
-  modifiedData: [],
+  // modifiedData: [],
 };
 
 ConfigPage.propTypes = {
@@ -90,7 +89,7 @@ ConfigPage.propTypes = {
   formErrors: PropTypes.array,
   getMenu: PropTypes.func.isRequired,
   initialData: PropTypes.array.isRequired,
-  modifiedData: PropTypes.array.isRequired,
+  // modifiedData: PropTypes.array.isRequired,
   onCancel: PropTypes.func.isRequired,
   onChange: PropTypes.func.isRequired,
   setErrors: PropTypes.func.isRequired,

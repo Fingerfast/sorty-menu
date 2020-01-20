@@ -1,5 +1,5 @@
 {
-  "ConfigPage.description": "Zde lze editovat menu",
+  "ConfigPage.description": "Nástroj pro editaci hierarchie menu",
   "ConfigPage.title": "Menu - Editor",
   "ConfigPage.switchToEditMode": "Přepni do edit módu",
   "MenuEditor.remove": "Odstranit",
