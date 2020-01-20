@@ -12,8 +12,6 @@ const SortableTreeItem = props => {
     drop,
     handleDelete,
     handleChangeRow,
-    defaultValue,
-    sortlyData
   } = props;
 
   // const [value, setValue] = useState(name)
@@ -32,9 +30,9 @@ const SortableTreeItem = props => {
   // };
 
   return (
-    <Item ref={ref} style={{ marginLeft: depth * 20 }} key={id+'2'}>
+    <Item ref={ref} style={{ marginLeft: depth * 20 }} key={id}>
       {/* InputText prop `name` sets ID and NAME without possibility to override it */}
-      <input key={id} value={name} name="name" onChange={handleChangeRow(id, sortlyData)} />
+      <input key={id} value={name} name="name" onChange={handleChangeRow(id)} />
       {/*<input value={name} name="name" onChange={(e) => debouncedCallback(e.target.value)}  />*/}
       <button kind="secondary" onClick={() => handleDelete(id)}>
         {''}
