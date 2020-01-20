@@ -13,7 +13,7 @@ import {
 const initialState = fromJS({
   didCheckErrors: false,
   formErrors: List([]),
-  initialData: [{id: 1, name: 'ruda', depth: 0},{id: 2, name: 'honza', depth: 0}],
+  initialData: [],
   modifiedData: [],
   submitSuccess: false,
 });
@@ -54,7 +54,7 @@ function configPageReducer(state = initialState, action) {
           //.update('formErrors', () => List([]))
           .update('initialData', () => action.data)
           //.update('initialData', () => action.data)
-          .update('modifiedData', () => [])
+          // .update('modifiedData', () => [])
           //.update('menusList', () => action.menusList)
           .update('submitSuccess', v => (v = !v))
       );

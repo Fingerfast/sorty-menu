@@ -16,7 +16,7 @@ const Title = styled.h2`
   color: #333740;
 `;
 
-export default function MenuEditor ({ onChange, editMode, menuItems}) {
+export default function MenuEditor ({ onChange, editMode, menuItems, modifiedData}) {
 
   return (
     <Wrapper>
@@ -27,7 +27,7 @@ export default function MenuEditor ({ onChange, editMode, menuItems}) {
         <div className="col-xs-12 col-md-6">
           <DndProvider backend={HTML5Backend}>
             <ContextProvider>
-              <SortableMenu editMode={editMode} onChange={onChange} menuItems={menuItems}/>
+              <SortableMenu editMode={editMode} onChange={onChange} menuItems={menuItems} modifiedData={modifiedData}/>
             </ContextProvider>
           </DndProvider>
         </div>

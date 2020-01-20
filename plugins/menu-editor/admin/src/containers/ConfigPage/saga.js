@@ -1,12 +1,12 @@
 // import { LOCATION_CHANGE } from 'react-router-redux';
 import { call, fork, put, select, takeLatest } from 'redux-saga/effects';
 import { request } from 'strapi-helper-plugin';
-import { getMenu, getMenuSucceeded } from './actions';
+import { getMenu, getMenuSucceeded, submitSucceeded } from './actions';
 import { SUBMIT, GET_MENU, GET_MENU_SUCCEEDED } from './constants';
 import {
   makeSelectModifiedData,
   makeSelectCurrentMenu,
-  makeSelectInitialMenusList,
+  makeSelectInitialMenusList, makeSelectInitialData,
 } from './selectors';
 import pluginId from '../../pluginId';
 import { flatten, convert } from 'react-sortly';
@@ -14,35 +14,28 @@ import { flatten, convert } from 'react-sortly';
 const remapSortlyInput = databaseOutput => {
   return databaseOutput.map(row => {
     const {
-      id,
-      parent_id = null,
-      menu_id,
-      order,
-      title,
+      uuid,
+      depth_order = 0,
+      parent_uuid = null,
     } = row;
 
     return {
-      id,
-      index: order,
-      name: title,
-      parentId: parent_id,
-      menu_id,
+      id: uuid,
+      index: depth_order,
+      parentId: parent_uuid,
+      name: 'title'
     };
   });
 };
 
 const remapSortlyOutput = sortlyOutput => {
   return sortlyOutput.map(row => {
-    const { rowid, id, index, name, parentId = null, page_id, menu_uuid } = row;
+    const { id, index, parentId = null } = row;
 
     return {
-      id: rowid,
       uuid: id,
-      index,
-      name,
-      parent_uuid: parentId,
-      menu_uuid,
-      page_id,
+      depth_order: index,
+      parent_uuid: parentId === 0 ? null : parentId,
     };
   });
 };
@@ -65,14 +58,14 @@ export function* menuGet() {
 
 export function* submit() {
   try {
-    const modifiedData = yield select(makeSelectModifiedData());
-    const body = remapSortlyOutput(flatten(modifiedData));
+    const initialData = yield select(makeSelectInitialData());
+    const body = remapSortlyOutput(flatten(initialData));
     const requestURL = `/${pluginId}/source-menu`;
-
     yield call(request, requestURL, { method: 'PUT', body });
     // Update reducer with optimisticResponse
     strapi.notification.success('email.notification.config.success');
-    //yield put(submitSucceeded(convert(remapSortlyInput(response))));
+    yield put(submitSucceeded(convert(remapSortlyOutput(body))));
+    // yield put(submitSucceeded(body))
     yield put(getMenu());
   } catch (err) {
     strapi.notification.error('notification.error');
