@@ -35,7 +35,6 @@ const SortableTreeItem = props => {
       <input key={id} value={name} name="name" onChange={handleChangeRow(id)} />
       {/*<input value={name} name="name" onChange={(e) => debouncedCallback(e.target.value)}  />*/}
       <button kind="secondary" onClick={() => handleDelete(id)}>
-        {''}
         <FormattedMessage id={'menu-editor.MenuEditor.remove'} />
       </button>
     </Item>
