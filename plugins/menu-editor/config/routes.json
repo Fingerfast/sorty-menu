@@ -2,40 +2,16 @@
   "routes": [
     {
       "method": "GET",
-      "path": "/menu",
-      "handler": "Menu.getMenuList",
-      "config": {
-        "policies": []
-      }
-    },
-    {
-      "method": "POST",
-      "path": "/menu",
-      "handler": "Menu.postMenu",
-      "config": {
-        "policies": []
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/menu/:id",
-      "handler": "Menu.getMenuById",
+      "path": "/source-menu",
+      "handler": "Source_menu.getSourceMenu",
       "config": {
         "policies": []
       }
     },
     {
       "method": "PUT",
-      "path": "/menu/:id",
-      "handler": "Menu.putMenuById",
-      "config": {
-        "policies": []
-      }
-    },
-    {
-      "method": "DELETE",
-      "path": "/menu/:id",
-      "handler": "Menu.deleteMenuById",
+      "path": "/source-menu",
+      "handler": "Source_menu.putSourceMenu",
       "config": {
         "policies": []
       }
