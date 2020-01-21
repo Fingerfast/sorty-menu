@@ -23,20 +23,41 @@ export default function SortableMenu ({ menuItems, modifiedMenuItemsData, onChan
     );
   }, []);
 
-  const handleDelete = useCallback((id, data) => (e) => {
-    e.preventDefault();
-    const index = data.findIndex(item => item.id === id);
-    onChange('menuItems', remove(data, index));
-  },[]);
+  // const handleDelete = useCallback((id) => (e) => {
+  //   e.preventDefault();
+  //   console.log('NEBUDOU MENU ITESM' , menuItems, id)
+  //   const index = menuItems.findIndex(item => item.id === id);
+  //   onChange('menuItems', remove(menuItems, index));
+  // },[]);
 
-  const handleClickAdd = useCallback((data) => (e) => {
+  // const handleClickAdd = useCallback((data) => (e) => {
+  //   console.log('MENU ITEMS!!!!!' , menuItems)
+  //   e.preventDefault();
+  //   onChange('menuItems', add(data, {id: nanoid(12), name: `novy kokot${nanoid(4)}`, depth: 0}));
+  // },[]);
+  const handleClickAdd = (e) => {
+    console.log('ADD--' , e, menuItems)
     e.preventDefault();
-    onChange('menuItems', add(data, {id: nanoid(12), name: 'novy kokot', depth: 0}));
-  },[]);
+    onChange('menuItems', add(menuItems, {
+      id: Date.now().toString(),
+      name: `novy kokot${nanoid(4)}`,
+    }));
+  };
+
+  const handleDelete = (id) => (e) => {
+    e.preventDefault();
+    console.log('NEBUDOU MENU ITESM' , menuItems, id)
+    const index = menuItems.findIndex(item => item.id === id);
+    onChange('menuItems', remove(menuItems, index));
+  };
+
 
   const handleSortly = (newItems) => {
+    console.log('OLD MENU ITEMS' , menuItems)
     onChange('menuItems', newItems);
+    console.log('NEW ITEMS' , newItems)
   };
+  console.log('SORTLY!!!!!!!')
 
   return (
     <Fragment>
@@ -45,12 +66,12 @@ export default function SortableMenu ({ menuItems, modifiedMenuItemsData, onChan
           items={menuItems}
           onChange={handleSortly}
         >
-          {(props, index) => (
-            <SortableMenuItem key={index} {...{ handleDelete, handleChangeRow }} {...props} menuItems={menuItems}/>
+          {(props) => (
+            <SortableMenuItem {...{ handleDelete, handleChangeRow, menuItems }} {...props}/>
           )}
         </Sortly>
       </SortlyWrapper>
-      <button onClick={handleClickAdd(menuItems)}>
+      <button onClick={handleClickAdd}>
         <FormattedMessage id={'menu-editor.MenuEditor.add'} />
       </button>
     </Fragment>
