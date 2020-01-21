@@ -12,13 +12,34 @@ module.exports = {
       message: 'ok',
     });
   },
-  getSourceMenu: async ctx => {
+  findOne: async ctx => {
+    const { uuid } = ctx.params
     const Menu = strapi.plugins['menu-editor'].models.source_menu;
 
     try {
       const sourceMenu = await strapi.plugins['menu-editor'].config
         .queries(Menu)
-        .getSourceMenu();
+        .findOne({uuid});
+      
+      ctx.body = sourceMenu;
+    } catch (error) {
+      console.log('getMenusList error:', error);
+      ctx.send(
+        {
+          message: 'error',
+          error,
+        },
+        400
+      );
+    }
+  },
+  find: async ctx => {
+    const Menu = strapi.plugins['menu-editor'].models.source_menu;
+
+    try {
+      const sourceMenu = await strapi.plugins['menu-editor'].config
+        .queries(Menu)
+        .find();
 
       ctx.body = sourceMenu.serialize().map(({uuid, depth_order, parent_uuid}) => ({
         uuid,
