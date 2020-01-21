@@ -1,7 +1,8 @@
 const bookshelf = require('bookshelf');
 
 module.exports = model => ({
-  getSourceMenu: async () => await model.fetchAll(),
+  findOne: async ({uuid}) => await model.forge({uuid}).fetch(),
+  find: async () => await model.fetchAll(),
   putSourceMenu: async (menu_items) => {
     const Bookshelf = new bookshelf(strapi.connections.default);
     //TODO catch errors
