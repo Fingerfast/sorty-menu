@@ -7,7 +7,6 @@ import {
   ON_CHANGE,
   UNDO,
   REDO,
-  SUBMIT_SUCCEEDED,
 } from './constants';
 
 const initialState = fromJS({
@@ -48,11 +47,6 @@ function menuEditorReducer(state = initialState, action) {
       return (
         state
          .update(action.key, () => action.value)
-      );
-    case SUBMIT_SUCCEEDED:
-      return (
-        state
-          .update('menuItems', () => action.data)
       );
     default:
       return state;

@@ -530,10 +530,10 @@ react-select@^3.0.8:
     react-input-autosize "^2.2.2"
     react-transition-group "^2.2.1"
 
-react-sortly@^2.0.4:
-  version "2.0.4"
-  resolved "https://registry.yarnpkg.com/react-sortly/-/react-sortly-2.0.4.tgz#5039cad307d8869c7c54d572dee84dd7430f83d0"
-  integrity sha512-y/PK22SXfmY0X1RJPjN8ceU3Lr0wm8lwrEi78BfKDkglEQockXiaLSxK3gu2aGs+rIjrIkvaTmpFkLXodRj1bQ==
+react-sortly@^3.0.4:
+  version "3.0.4"
+  resolved "https://registry.yarnpkg.com/react-sortly/-/react-sortly-3.0.4.tgz#3d60a557d6a755e935ff246eb580199da872b229"
+  integrity sha512-MbEuGbZCItXR9O8EyxEHfm5+vbHE3EOj+SuKx2tBGXQZuvCCnsTx5i9Aal/O62APEG5eOdkAH+z+wAeaY359LA==
 
 react-transition-group@^2.2.1:
   version "2.9.0"
