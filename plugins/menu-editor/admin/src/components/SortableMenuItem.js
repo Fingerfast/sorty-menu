@@ -13,10 +13,11 @@ import {
 const Item = styled.div`
   display: flex;
   flex: 1 0 auto;
-  border: dashed 1px #e2e2e2;
+  border: solid 1px #e2e2e2;
+  border-radius: 5px;
   border-image: initial;
   align-items: center;
-  padding: 0px;
+  padding: 5px;
   background: rgb(255, 255, 255);
   &:hover {
     background: #cccccc;
