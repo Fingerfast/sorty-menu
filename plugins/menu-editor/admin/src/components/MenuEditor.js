@@ -11,25 +11,15 @@ const Wrapper = styled.div`
   flex-direction: column;
 `;
 
-const Title = styled.h2`
-  padding: 10px;
-  color: #333740;
-`;
-
-export default function MenuEditor ({ onChange, editMode, menuItems, modifiedData}) {
+export default function MenuEditor ({ onChange, editMode, menuItems}) {
 
   return (
     <Wrapper>
-      <FormattedMessage id={'menu-editor.MenuEditor.chooseMenu'}>
-        {message => (<Title>{message}</Title>)}
-      </FormattedMessage>
-      <div className="row">
-        <DndProvider backend={HTML5Backend}>
-          <ContextProvider>
-            <SortableMenu editMode={editMode} onChange={onChange} menuItems={menuItems} modifiedData={modifiedData}/>
-          </ContextProvider>
-        </DndProvider>
-      </div>
+      <DndProvider backend={HTML5Backend}>
+        <ContextProvider>
+          <SortableMenu editMode={editMode} onChange={onChange} menuItems={menuItems}/>
+        </ContextProvider>
+      </DndProvider>
     </Wrapper>
   );
 };

@@ -1,4 +1,5 @@
 {
+  "MenuEditor.dataSaved": "Data uložena",
   "MenuEditor.description": "Nástroj pro editaci hierarchie menu",
   "MenuEditor.title": "Menu - Editor",
   "MenuEditor.switchToEditMode": "Přepni do edit módu",
