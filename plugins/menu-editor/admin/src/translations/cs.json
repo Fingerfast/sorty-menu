@@ -1,7 +1,7 @@
 {
-  "ConfigPage.description": "Nástroj pro editaci hierarchie menu",
-  "ConfigPage.title": "Menu - Editor",
-  "ConfigPage.switchToEditMode": "Přepni do edit módu",
+  "MenuEditor.description": "Nástroj pro editaci hierarchie menu",
+  "MenuEditor.title": "Menu - Editor",
+  "MenuEditor.switchToEditMode": "Přepni do edit módu",
   "MenuEditor.remove": "Odstranit",
   "MenuEditor.add": "Přidat",
   "MenuEditor.addNewMenu": "Přidat nové menu",

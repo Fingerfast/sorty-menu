@@ -2,7 +2,7 @@ import React from 'react';
 import pluginPkg from '../../package.json';
 import pluginId from './pluginId';
 import App from './containers/App';
-import Initializer from './containers/Initializer';
+import Initializer from './utils/Initializer';
 import lifecycles from './lifecycles';
 import trads from './translations';
 

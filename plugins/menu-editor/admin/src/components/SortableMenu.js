@@ -3,7 +3,7 @@ import Sortly, {remove, add} from 'react-sortly';
 import { FormattedMessage } from 'react-intl';
 import update from 'immutability-helper';
 import nanoid from 'nanoid/non-secure';
-import SortableTreeItem from './SortableTreeItem';
+import SortableMenuItem from './SortableMenuItem';
 import styled from 'styled-components';
 
 const SortlyWrapper = styled.div`
@@ -11,12 +11,12 @@ const SortlyWrapper = styled.div`
   flex-flow: column wrap;
 `;
 
-export default function SortableMenu ({ onChange, editMode, menuItems, modifiedData }) {
+export default function SortableMenu ({ menuItems, modifiedMenuItemsData, onChange, editMode }) {
   const handleChangeRow = useCallback((id, data) => (e) => {
     const index = data.findIndex(item => item.id === id);
     const { name, value } = e.target;
     onChange(
-      'initialData',
+      'menuItems',
       update(data, {
         [index]: { [name]: { $set: value }},
       })
@@ -26,16 +26,16 @@ export default function SortableMenu ({ onChange, editMode, menuItems, modifiedD
   const handleDelete = useCallback((id, data) => (e) => {
     e.preventDefault();
     const index = data.findIndex(item => item.id === id);
-    onChange('initialData', remove(data, index));
+    onChange('menuItems', remove(data, index));
   },[]);
 
   const handleClickAdd = useCallback((data) => (e) => {
     e.preventDefault();
-    onChange('initialData', add(data, {id: nanoid(12), name: 'novy kokot', depth: 0}));
+    onChange('menuItems', add(data, {id: nanoid(12), name: 'novy kokot', depth: 0}));
   },[]);
 
   const handleSortly = (newItems) => {
-    onChange('initialData', newItems);
+    onChange('menuItems', newItems);
   };
 
   return (
@@ -46,7 +46,7 @@ export default function SortableMenu ({ onChange, editMode, menuItems, modifiedD
           onChange={handleSortly}
         >
           {(props, index) => (
-            <SortableTreeItem key={index} {...{ handleDelete, handleChangeRow }} {...props} menuItems={menuItems}/>
+            <SortableMenuItem key={index} {...{ handleDelete, handleChangeRow }} {...props} menuItems={menuItems}/>
           )}
         </Sortly>
       </SortlyWrapper>
