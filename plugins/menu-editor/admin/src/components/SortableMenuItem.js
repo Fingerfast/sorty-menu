@@ -26,14 +26,15 @@ const Input = styled.input`
   flex: 1 0 auto;
 `;
 
-export default function SortableMenuItem ({data: { id, name, depth }, drag, drop, handleDelete, handleChangeRow, menuItems}) {
+export default function SortableMenuItem ({data: { id, name, depth }, drag, drop, handleDelete, handleChangeRow}) {
+  console.log('ID' , id)
   const ref = React.useRef(null);
   drag(drop(ref));
 
   return (
     <Item ref={ref} style={{ marginLeft: depth * 20 }} key={id}>
-      <Input key={id} value={name} name="name" onChange={handleChangeRow(id, menuItems)} />
-      <Button kind="primary" onClick={handleDelete(id, menuItems)}><FontAwesomeIcon icon={faTrash} /></Button>
+      <Input value={name} name="name" onChange={handleChangeRow} />
+      <Button kind="primary" onClick={handleDelete(id)}><FontAwesomeIcon icon={faTrash} /></Button>
     </Item>
   );
 };
