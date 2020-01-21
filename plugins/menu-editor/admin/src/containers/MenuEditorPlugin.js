@@ -3,14 +3,14 @@ import PropTypes from 'prop-types';
 import {connect} from 'react-redux';
 import {bindActionCreators, compose} from 'redux';
 import {ContainerFluid, PluginHeader} from 'strapi-helper-plugin';
-import pluginId from '../../pluginId';
-import MenuEditor from '../../components/MenuEditor/MenuEditor';
-import { onCancel, onChange, setErrors, submit, getMenu} from './actions';
-import reducer from './reducer';
-import saga from './saga';
-import selectConfigPage from './selectors';
+import pluginId from '../pluginId';
+import MenuEditor from '../components/MenuEditor';
+import { onCancel, onChange, setErrors, submit, getMenu} from '../redux/actions';
+import reducer from '../redux/reducer';
+import saga from '../redux/saga';
+import selectMenuEditorPlugin from '../redux/selectors';
 
-class ConfigPage extends React.Component {
+class MenuEditorPlugin extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -59,13 +59,13 @@ class ConfigPage extends React.Component {
         <form onSubmit={this.handleSubmit}>
           <ContainerFluid>
             <PluginHeader
-              title={{id: 'menu-editor.ConfigPage.title'}}
-              description={{id: 'menu-editor.ConfigPage.description'}}
+              title={{id: 'menu-editor.MenuEditor.title'}}
+              description={{id: 'menu-editor.MenuEditor.description'}}
               actions={this.state.editMode ? this.pluginHeaderActions : this.actionEdit}
             />
             <MenuEditor
-              menuItems={this.props.initialData}
-              modifiedData={this.props.modifiedData}
+              menuItems={this.props.menuItems}
+              modifiedMenuItemsData={this.props.modifiedMenuItemsData}
               editMode={this.state.editMode}
               onChange={this.props.onChange}
             />
@@ -76,41 +76,29 @@ class ConfigPage extends React.Component {
   }
 }
 
-ConfigPage.defaultProps = {
-  appEnvironments: [],
-  formErrors: [],
-  initialData: [],
-  // modifiedData: [],
+MenuEditorPlugin.defaultProps = {
+  menuItems: [],
 };
 
-ConfigPage.propTypes = {
-  appEnvironments: PropTypes.array,
-  didCheckErrors: PropTypes.bool.isRequired,
-  formErrors: PropTypes.array,
+MenuEditorPlugin.propTypes = {
+  menuItems: PropTypes.array.isRequired,
   getMenu: PropTypes.func.isRequired,
-  initialData: PropTypes.array.isRequired,
-  // modifiedData: PropTypes.array.isRequired,
-  onCancel: PropTypes.func.isRequired,
   onChange: PropTypes.func.isRequired,
-  setErrors: PropTypes.func.isRequired,
   submit: PropTypes.func.isRequired,
-  // submitSuccess: PropTypes.bool.isRequired,
 };
 
 function mapDispatchToProps(dispatch) {
   return bindActionCreators(
     {
       getMenu,
-      onCancel,
       onChange,
-      setErrors,
       submit,
     },
     dispatch
   );
 }
 
-const mapStateToProps = selectConfigPage();
+const mapStateToProps = selectMenuEditorPlugin();
 
 const withConnect = connect(
   mapStateToProps,
@@ -118,15 +106,15 @@ const withConnect = connect(
 );
 
 const withReducer = strapi.injectReducer({
-  key: 'configPage',
+  key: 'menuEditor',
   reducer,
   pluginId,
 });
 
-const withSaga = strapi.injectSaga({key: 'configPage', saga, pluginId});
+const withStrapiSaga = strapi.injectSaga({key: 'menuEditor', saga, pluginId});
 
 export default compose(
   withReducer,
-  withSaga,
+  withStrapiSaga,
   withConnect
-)(ConfigPage);
+)(MenuEditorPlugin);
