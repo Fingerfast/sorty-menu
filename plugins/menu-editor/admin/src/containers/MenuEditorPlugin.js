@@ -1,11 +1,11 @@
-import React from 'react';
+import React, {Fragment} from 'react';
 import PropTypes from 'prop-types';
 import {connect} from 'react-redux';
 import {bindActionCreators, compose} from 'redux';
 import {ContainerFluid, PluginHeader} from 'strapi-helper-plugin';
 import pluginId from '../pluginId';
 import MenuEditor from '../components/MenuEditor';
-import { onCancel, onChange, setErrors, submit, getMenu} from '../redux/actions';
+import { onChange, submit, getMenu} from '../redux/actions';
 import reducer from '../redux/reducer';
 import saga from '../redux/saga';
 import selectMenuEditorPlugin from '../redux/selectors';
@@ -27,6 +27,7 @@ class MenuEditorPlugin extends React.Component {
 
   handleSubmit = e => {
     e.preventDefault();
+    this.setState({editMode: false});
     return this.props.submit();
   };
 
@@ -55,7 +56,7 @@ class MenuEditorPlugin extends React.Component {
 
   render() {
     return (
-      <div>
+      <Fragment>
         <form onSubmit={this.handleSubmit}>
           <ContainerFluid>
             <PluginHeader
@@ -71,7 +72,7 @@ class MenuEditorPlugin extends React.Component {
             />
           </ContainerFluid>
         </form>
-      </div>
+      </Fragment>
     );
   }
 }

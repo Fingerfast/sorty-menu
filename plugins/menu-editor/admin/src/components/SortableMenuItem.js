@@ -1,48 +1,88 @@
-import React, {useState} from "react";
-import PropTypes from "prop-types";
-import { FormattedMessage } from 'react-intl';
+import React, {useEffect, useState, } from "react";
 import styled from 'styled-components';
-import { useDebouncedCallback } from 'use-debounce';
+import { useDebounce } from 'use-debounce';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { useDrag, useDrop } from 'react-sortly';
+import { Button } from 'strapi-helper-plugin'
 import {
   faPlus,
   faTrash,
-  faBaseballBall,
+  faArrowsAlt,
 } from '@fortawesome/free-solid-svg-icons';
 
 const Item = styled.div`
   display: flex;
-  cursor: move;
   flex: 1 0 auto;
   border: dashed 1px #e2e2e2;
   border-image: initial;
-  padding: 15px;
+  align-items: center;
+  padding: 0px;
   background: rgb(255, 255, 255);
+  &:hover {
+    background: #cccccc;
+  }
 `;
-const Button = styled.button`
-  cursor: move;
+const TrashIcon = styled.div`
+  display: flex;
+  align-items: center;
+  > svg {
+    font-size: 1.5em;
+    color: ${props => props.editMode ? 'black' : '#e2e2e2'}
 `;
 const Input = styled.input`
   flex: 1 0 auto;
+  text-transform: capitalize;
+  font-size: 1.2em;
+`;
+const DraggingIcon = styled.div`
+  cursor: ${props => props.editMode ? 'move' : 'normal'};
+  display: flex;
+  flex: 0 1 auto;
+  padding: 5px;
+  border: ${props => props.editMode ? '1px solid black' : '1px solid #e2e2e2'};
+  border-radius: 5px;
+  justify-content: center;
+  align-items: center;
+  margin-right: 10px;
+  // ${props => props.depth === 0 && "background: #e2e2e2;"};
+  > svg {
+    font-size: 2em;
+    color: ${props => props.editMode ? 'black' : '#e2e2e2'}
+  }
 `;
 
-export default function SortableMenuItem ({data: { id, name, depth }, drag, drop, handleDelete, handleChangeRow}) {
-  console.log('ID' , id)
-  const ref = React.useRef(null);
-  drag(drop(ref));
+export default function SortableMenuItem ({id, depth, data: { name, isNew }, handleChangeRow, handleDelete, editMode}) {
+
+  // const [value, setValue] = useState(name);
+  // const debouncedSearchTerm = useDebounce(value, 500);
+
+  // useEffect(
+  //   () => {
+  //     // Update debounced value after delay
+  //     if (debouncedSearchTerm) {
+  //       searchCharacters(debouncedSearchTerm)
+  //     }
+  //   },
+  //   [debouncedSearchTerm] // Only re-call effect if value or delay changes
+  // );
+
+  const [{ isDragging }, drag, preview] = useDrag({
+    collect: (monitor) => ({ isDragging: monitor.isDragging() })
+  });
+
+  const [, drop] = useDrop();
 
   return (
-    <Item ref={ref} style={{ marginLeft: depth * 20 }} key={id}>
-      <Input value={name} name="name" onChange={handleChangeRow} />
-      <Button kind="primary" onClick={handleDelete(id)}><FontAwesomeIcon icon={faTrash} /></Button>
-    </Item>
+    <div ref={(ref) => drop(preview(ref))}>
+      <div>
+        <Item style={{ marginLeft: depth * 30 }} key={id}>
+          <DraggingIcon ref={editMode ? drag : null} depth={depth} editMode={editMode}><FontAwesomeIcon icon={faArrowsAlt}/></DraggingIcon>
+          <Input disabled={!editMode} value={name} name="name" onChange={handleChangeRow(id)}/>
+          <Button disabled={!editMode} onClick={handleDelete(id)}>
+            <TrashIcon editMode={editMode}><FontAwesomeIcon icon={faTrash}/></TrashIcon>
+          </Button>
+        </Item>
+      </div>
+    </div>
   );
-};
-
-SortableMenuItem.propTypes = {
-  data: PropTypes.object.isRequired,
-  drag: PropTypes.func.isRequired,
-  drop: PropTypes.func.isRequired,
-  handleDelete: PropTypes.func.isRequired,
-  handleChangeRow: PropTypes.func.isRequired,
 };

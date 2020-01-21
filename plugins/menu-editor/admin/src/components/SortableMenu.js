@@ -1,79 +1,86 @@
-import React, {useCallback, Fragment} from 'react';
+import React, {Fragment} from 'react';
 import Sortly, {remove, add} from 'react-sortly';
 import { FormattedMessage } from 'react-intl';
 import update from 'immutability-helper';
 import nanoid from 'nanoid/non-secure';
 import SortableMenuItem from './SortableMenuItem';
 import styled from 'styled-components';
+import { Button } from 'strapi-helper-plugin'
+import { useDebounce } from 'use-debounce';
+
+const ActionsMenu = styled.div`
+  display: flex;
+`;
 
 const SortlyWrapper = styled.div`
   display: flex;
   flex-flow: column wrap;
+  flex: 0 1 700px;
+  margin-top: 10px;
 `;
 
-export default function SortableMenu ({ menuItems, modifiedMenuItemsData, onChange, editMode }) {
-  const handleChangeRow = useCallback((id, data) => (e) => {
-    const index = data.findIndex(item => item.id === id);
-    const { name, value } = e.target;
-    onChange(
-      'menuItems',
-      update(data, {
-        [index]: { [name]: { $set: value }},
-      })
-    );
-  }, []);
+export default function SortableMenu ({ menuItems, onChange, editMode }) {
 
-  // const handleDelete = useCallback((id) => (e) => {
-  //   e.preventDefault();
-  //   console.log('NEBUDOU MENU ITESM' , menuItems, id)
-  //   const index = menuItems.findIndex(item => item.id === id);
-  //   onChange('menuItems', remove(menuItems, index));
-  // },[]);
-
-  // const handleClickAdd = useCallback((data) => (e) => {
-  //   console.log('MENU ITEMS!!!!!' , menuItems)
-  //   e.preventDefault();
-  //   onChange('menuItems', add(data, {id: nanoid(12), name: `novy kokot${nanoid(4)}`, depth: 0}));
-  // },[]);
   const handleClickAdd = (e) => {
-    console.log('ADD--' , e, menuItems)
     e.preventDefault();
     onChange('menuItems', add(menuItems, {
-      id: Date.now().toString(),
-      name: `novy kokot${nanoid(4)}`,
+      id: nanoid(12),
+      name: '',
     }));
   };
 
   const handleDelete = (id) => (e) => {
     e.preventDefault();
-    console.log('NEBUDOU MENU ITESM' , menuItems, id)
     const index = menuItems.findIndex(item => item.id === id);
     onChange('menuItems', remove(menuItems, index));
   };
 
+  // const [debouncedCallback] = useDebouncedCallback(
+  //   // function
+  //   (value,id) => {
+  //     onChange(
+  //       'menuItems',
+  //       update(menuItems, {
+  //         [index]: { [name]: { $set: value }},
+  //       })
+  //     );
+  //   },
+  //   // delay in ms
+  //   1000
+  // );
+
+  const handleChangeRow = (id) => (e) => {
+    const index = menuItems.findIndex(item => item.id === id);
+    console.log('EEE', e, id)
+    const { name, value } = e.target;
+    onChange(
+      'menuItems',
+      update(menuItems, {
+        [index]: { [name]: { $set: value }},
+      })
+    );
+  };
 
   const handleSortly = (newItems) => {
-    console.log('OLD MENU ITEMS' , menuItems)
     onChange('menuItems', newItems);
-    console.log('NEW ITEMS' , newItems)
   };
-  console.log('SORTLY!!!!!!!')
 
   return (
     <Fragment>
+      <ActionsMenu>
+        <Button kind="primary" disabled={!editMode} onClick={handleClickAdd}><FormattedMessage id={'menu-editor.MenuEditor.add'} /></Button>
+        <Button kind="secondary" disabled={!editMode} onClick={handleClickAdd}><FormattedMessage id={'menu-editor.MenuEditor.addNewMenu'} /></Button>
+      </ActionsMenu>
       <SortlyWrapper>
         <Sortly
           items={menuItems}
           onChange={handleSortly}
         >
           {(props) => (
-            <SortableMenuItem {...{ handleDelete, handleChangeRow, menuItems }} {...props}/>
+            <SortableMenuItem {...{ handleDelete, handleChangeRow }} {...props} editMode={editMode}/>
           )}
         </Sortly>
       </SortlyWrapper>
-      <button onClick={handleClickAdd}>
-        <FormattedMessage id={'menu-editor.MenuEditor.add'} />
-      </button>
     </Fragment>
   );
 };
