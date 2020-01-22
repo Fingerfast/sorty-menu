@@ -32,6 +32,11 @@
     "Visibility": {
       "type": "boolean",
       "default": true
+    },
+    "source_menus": {
+      "via": "page_id",
+      "plugin": "menu-editor",
+      "collection": "source_menu"
     }
   }
 }
