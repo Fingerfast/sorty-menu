@@ -24,6 +24,11 @@
       "required": false,
       "unique": false,
       "configurable": true
+    },
+    "page_id": {
+      "via": "id",
+      "plugin": "content-manager",
+      "model": "pages"
     }
   }
 }

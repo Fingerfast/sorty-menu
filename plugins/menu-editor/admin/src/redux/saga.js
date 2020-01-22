@@ -32,6 +32,7 @@ export function* submit() {
       body
     })
     strapi.notification.success(`${pluginId}.MenuEditor.dataSaved`);
+    yield call(menuGet)
   } catch (error) {
     strapi.notification.error('notification.error');
   }

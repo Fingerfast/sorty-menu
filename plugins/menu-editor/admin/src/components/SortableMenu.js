@@ -7,6 +7,7 @@ import SortableMenuItem from './SortableMenuItem';
 import styled from 'styled-components';
 import { Button } from 'strapi-helper-plugin'
 import { useDebounce } from 'use-debounce';
+import debounce from 'lodash/debounce';
 
 const ActionsMenu = styled.div`
   display: flex;
@@ -35,30 +36,20 @@ export default function SortableMenu ({ menuItems, onChange, editMode }) {
     onChange('menuItems', remove(menuItems, index));
   };
 
-  // const [debouncedCallback] = useDebouncedCallback(
-  //   // function
-  //   (value,id) => {
-  //     onChange(
-  //       'menuItems',
-  //       update(menuItems, {
-  //         [index]: { [name]: { $set: value }},
-  //       })
-  //     );
-  //   },
-  //   // delay in ms
-  //   1000
-  // );
+  function deb(name,index,value) {
+
+  }
 
   const handleChangeRow = (id) => (e) => {
+    console.log('ID || E' , id, e.target.value)
     const index = menuItems.findIndex(item => item.id === id);
-    console.log('EEE', e, id)
     const { name, value } = e.target;
     onChange(
       'menuItems',
       update(menuItems, {
         [index]: { [name]: { $set: value }},
       })
-    );
+    )
   };
 
   const handleSortly = (newItems) => {
@@ -69,6 +60,9 @@ export default function SortableMenu ({ menuItems, onChange, editMode }) {
     <Fragment>
       <ActionsMenu>
         <Button kind="primary" disabled={!editMode} onClick={handleClickAdd}><FormattedMessage id={'menu-editor.MenuEditor.add'} /></Button>
+        {/*<Button kind="primary" disabled={!editMode} onClick={location.href="/plugins/content-manager/application::pages.pages/create?redirectUrl=/plugins/menu-editor"}>*/}
+        {/*</Button>*/}
+
         <Button kind="secondary" disabled={!editMode} onClick={handleClickAdd}><FormattedMessage id={'menu-editor.MenuEditor.addNewMenu'} /></Button>
       </ActionsMenu>
       <SortlyWrapper>

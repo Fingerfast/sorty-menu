@@ -41,10 +41,11 @@ module.exports = {
         .queries(Menu)
         .find();
 
-      ctx.body = sourceMenu.serialize().map(({uuid, depth_order, parent_uuid}) => ({
+      ctx.body = sourceMenu.serialize().map(({uuid, depth_order, parent_uuid, page_id}) => ({
         uuid,
         depth_order,
         parent_uuid,
+        page_id,
       }));
     } catch (error) {
       console.log('getMenusList error:', error);

@@ -1,17 +1,19 @@
 export const remapSortlyInput = databaseOutput => {
   return databaseOutput.map(row => {
     const {
-      uuid,
-      depth_order = 0,
-      parent_uuid = null,
+      id,
+      child_index = 0,
+      parent_id = null,
       name,
+      page_id,
     } = row;
 
     return {
-      id: uuid,
-      index: depth_order,
-      parentId: parent_uuid,
+      id,
+      index: child_index,
+      parentId: parent_id,
       name: name || 'Neni zadaný název',
+      page_id,
     };
   });
 };
