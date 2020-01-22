@@ -1,0 +1,37 @@
+{
+  "connection": "default",
+  "collectionName": "pages",
+  "info": {
+    "name": "Pages"
+  },
+  "options": {
+    "increments": true,
+    "timestamps": true
+  },
+  "attributes": {
+    "Name": {
+      "type": "string",
+      "private": false,
+      "required": true,
+      "unique": true
+    },
+    "Concept": {
+      "type": "boolean"
+    },
+    "Draggable": {
+      "type": "boolean"
+    },
+    "Type": {
+      "type": "enumeration",
+      "enum": [
+        "system_page",
+        "basic_page"
+      ],
+      "default": "system_page"
+    },
+    "Visibility": {
+      "type": "boolean",
+      "default": true
+    }
+  }
+}
