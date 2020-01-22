@@ -30,6 +30,7 @@ const TrashIcon = styled.div`
   > svg {
     font-size: 1.5em;
     color: ${props => props.editMode ? 'black' : '#e2e2e2'}
+  }
 `;
 const Input = styled.input`
   flex: 1 0 auto;
@@ -68,7 +69,6 @@ export default function SortableMenuItem ({id, depth, data: { name, isNew }, han
       <div>
         <Item style={{ marginLeft: depth * 30 }} key={id}>
           <DraggingIcon ref={editMode ? drag : null} depth={depth} editMode={editMode}><FontAwesomeIcon icon={faArrowsAlt}/></DraggingIcon>
-          <Input disabled={!editMode} value={name.charAt(0).toUpperCase() + name.slice(1)} name="name" onChange={handleChangeRow(id)}/>
           <Button disabled={!editMode} onClick={handleDelete(id)}>
             <TrashIcon editMode={editMode}><FontAwesomeIcon icon={faTrash}/></TrashIcon>
           </Button>
