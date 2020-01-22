@@ -1,16 +1,17 @@
-import React, {useEffect, useState, } from "react";
+import React, { useEffect, useState } from "react";
 import styled from 'styled-components';
-import { useDebounce } from 'use-debounce';
+import { useDebouncedCallback } from 'use-debounce';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useDrag, useDrop } from 'react-sortly';
-import { Button } from 'strapi-helper-plugin'
+import { Button } from 'strapi-helper-plugin';
+import debounce from 'lodash/debounce';
 import {
-  faPlus,
   faTrash,
   faArrowsAlt,
 } from '@fortawesome/free-solid-svg-icons';
 
 const Item = styled.div`
+  margin-top: 5px;
   display: flex;
   flex: 1 0 auto;
   border: solid 1px #e2e2e2;
@@ -32,7 +33,9 @@ const TrashIcon = styled.div`
 `;
 const Input = styled.input`
   flex: 1 0 auto;
-  text-transform: capitalize;
+  border: 1px solid #aed4fb;
+  background-color: white;
+  //text-transform: capitalize;
   font-size: 1.2em;
 `;
 const DraggingIcon = styled.div`
@@ -54,19 +57,6 @@ const DraggingIcon = styled.div`
 
 export default function SortableMenuItem ({id, depth, data: { name, isNew }, handleChangeRow, handleDelete, editMode}) {
 
-  // const [value, setValue] = useState(name);
-  // const debouncedSearchTerm = useDebounce(value, 500);
-
-  // useEffect(
-  //   () => {
-  //     // Update debounced value after delay
-  //     if (debouncedSearchTerm) {
-  //       searchCharacters(debouncedSearchTerm)
-  //     }
-  //   },
-  //   [debouncedSearchTerm] // Only re-call effect if value or delay changes
-  // );
-
   const [{ isDragging }, drag, preview] = useDrag({
     collect: (monitor) => ({ isDragging: monitor.isDragging() })
   });
@@ -78,7 +68,7 @@ export default function SortableMenuItem ({id, depth, data: { name, isNew }, han
       <div>
         <Item style={{ marginLeft: depth * 30 }} key={id}>
           <DraggingIcon ref={editMode ? drag : null} depth={depth} editMode={editMode}><FontAwesomeIcon icon={faArrowsAlt}/></DraggingIcon>
-          <Input disabled={!editMode} value={name} name="name" onChange={handleChangeRow(id)}/>
+          <Input disabled={!editMode} value={name.charAt(0).toUpperCase() + name.slice(1)} name="name" onChange={handleChangeRow(id)}/>
           <Button disabled={!editMode} onClick={handleDelete(id)}>
             <TrashIcon editMode={editMode}><FontAwesomeIcon icon={faTrash}/></TrashIcon>
           </Button>
