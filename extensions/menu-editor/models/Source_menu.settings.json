@@ -7,13 +7,15 @@
   },
   "attributes": {
     "child_index": {
-      "type": "integer"
-    },
-    "parent_id": {
-      "type": "integer"
+      "type": "integer",
+      "default": 0
     },
     "page_id": {
-      "model": "pages"
+      "model": "pages",
+      "via": "source_menus"
+    },
+    "Parent_id": {
+      "type": "integer"
     }
   }
 }

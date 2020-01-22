@@ -1,4 +1,6 @@
 {
+  "MenuEditor.addNewItem": "Add new item",
+  "MenuEditor.addNewRelatedItem": "Add new related item",
   "MenuEditor.dataSaved": "Data Saved",
   "MenuEditor.description": "Edit menus here",
   "MenuEditor.title": "Menu - Editor",

@@ -1,4 +1,7 @@
 {
+
+  "MenuEditor.addNewItem": "Přidat novou stránku",
+  "MenuEditor.addNewRelatedItem": "Přidat nový odkaz na stránku",
   "MenuEditor.dataSaved": "Data uložena",
   "MenuEditor.description": "Nástroj pro editaci hierarchie menu",
   "MenuEditor.title": "Menu - Editor",

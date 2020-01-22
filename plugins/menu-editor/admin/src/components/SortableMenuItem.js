@@ -5,6 +5,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useDrag, useDrop } from 'react-sortly';
 import { Button } from 'strapi-helper-plugin';
 import debounce from 'lodash/debounce';
+import {useHistory} from 'react-router-dom';
 import {
   faTrash,
   faArrowsAlt,
@@ -21,6 +22,7 @@ const Item = styled.div`
   padding: 5px;
   background: rgb(255, 255, 255);
   &:hover {
+    cursor: pointer;
     background: #cccccc;
   }
 `;
@@ -32,10 +34,10 @@ const TrashIcon = styled.div`
     color: ${props => props.editMode ? 'black' : '#e2e2e2'}
   }
 `;
-const Input = styled.input`
+const Label = styled.div`
   flex: 1 0 auto;
-  border: 1px solid #aed4fb;
-  background-color: white;
+  //border: 1px solid #aed4fb;
+  //background-color: white;
   //text-transform: capitalize;
   font-size: 1.2em;
 `;
@@ -56,22 +58,28 @@ const DraggingIcon = styled.div`
   }
 `;
 
-export default function SortableMenuItem ({id, depth, data: { name, isNew }, handleChangeRow, handleDelete, editMode}) {
-
+export default function SortableMenuItem ({ id, depth, data: { name, page_id }, editMode }) {
   const [{ isDragging }, drag, preview] = useDrag({
     collect: (monitor) => ({ isDragging: monitor.isDragging() })
   });
 
   const [, drop] = useDrop();
 
+  const history = useHistory()
+  const pluginPages = "plugins/content-manager/application::pages.pages";
+  const myLocation = strapi.router.location.pathname ? strapi.router.location.pathname : '/plugins/menu-editor';
+
+  const editItem = (page_id) => (e) => {
+    e.preventDefault()
+    history.push(`/${pluginPages}/${page_id}?redirectUrl=${myLocation}`)
+  }
+
   return (
-    <div ref={(ref) => drop(preview(ref))}>
+    <div onClick={editItem(page_id)} ref={(ref) => drop(preview(ref))}>
       <div>
-        <Item style={{ marginLeft: depth * 30 }} key={id}>
-          <DraggingIcon ref={editMode ? drag : null} depth={depth} editMode={editMode}><FontAwesomeIcon icon={faArrowsAlt}/></DraggingIcon>
-          <Button disabled={!editMode} onClick={handleDelete(id)}>
-            <TrashIcon editMode={editMode}><FontAwesomeIcon icon={faTrash}/></TrashIcon>
-          </Button>
+        <Item ref={editMode ? drag : null} style={{ marginLeft: depth * 30 }} key={id} title="Show details">
+          <DraggingIcon  depth={depth} editMode={editMode}><FontAwesomeIcon icon={faArrowsAlt}/></DraggingIcon>
+          <Label>{name.charAt(0).toUpperCase() + name.slice(1)}</Label>
         </Item>
       </div>
     </div>
