@@ -2,8 +2,6 @@
   "connection": "default",
   "collectionName": "menu-editor_source_menu",
   "info": {
-    "idAttribute": "uuid",
-    "idAttributeType": "uuid",
     "name": "source_menu",
     "description": ""
   },
@@ -15,7 +13,7 @@
       "type": "integer"
     },
     "page_id": {
-      "type": "integer"
+      "model": "pages"
     }
   }
 }
