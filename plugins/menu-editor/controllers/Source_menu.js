@@ -53,30 +53,30 @@ module.exports = {
       );
     }
   },
-  //saveSourceMenu: async ctx => {
-  //  const menu_items = ctx.request.body
-  //  const SourceMenu = strapi.plugins['menu-editor'].models.source_menu
+  putSourceMenu: async ctx => {
+    const menu_items = ctx.request.body
+    const SourceMenu = strapi.plugins['menu-editor'].models.source_menu
 
-  //  try {
-  //    await strapi.plugins['menu-editor'].config
-  //      .queries(SourceMenu)
-  //      .putSourceMenu(menu_items)
+    try {
+      await strapi.plugins['menu-editor'].config
+        .queries(SourceMenu)
+        .putSourceMenu(menu_items)
 
-  //    ctx.send(
-  //      {
-  //        message: 'OK',
-  //      },
-  //      201
-  //    );
-  //  } catch (error) {
-  //    console.log('putMenuById error:', JSON.stringify(error));
-  //    ctx.send(
-  //      {
-  //        message: 'error',
-  //        error,
-  //      },
-  //      400
-  //    );
-  //  }
-  //},
+      ctx.send(
+        {
+          message: 'OK',
+        },
+        201
+      );
+    } catch (error) {
+      console.log('putMenuById error:', JSON.stringify(error));
+      ctx.send(
+        {
+          message: 'error',
+          error,
+        },
+        400
+      );
+    }
+  },
 };

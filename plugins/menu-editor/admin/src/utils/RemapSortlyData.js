@@ -4,7 +4,6 @@ export const remapSortlyInput = databaseOutput => {
       id,
       child_index = 0,
       parent_id = null,
-      name,
       page_id,
     } = row;
 
@@ -12,7 +11,6 @@ export const remapSortlyInput = databaseOutput => {
       id,
       index: child_index,
       parentId: parent_id,
-      name: name || 'Neni zadaný název',
       page_id,
     };
   });
@@ -20,13 +18,12 @@ export const remapSortlyInput = databaseOutput => {
 
 export const remapSortlyOutput = sortlyOutput => {
   return sortlyOutput.map(row => {
-    const { id, index, parentId = null, name } = row;
+    const { id, index, parentId = null } = row;
 
     return {
-      uuid: id,
-      depth_order: index,
-      parent_uuid: parentId === 0 ? null : parentId,
-      name,
+      id,
+      child_index: index,
+      parent_id: parentId === 0 ? null : parentId,
     };
   });
 };
