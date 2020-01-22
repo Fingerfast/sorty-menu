@@ -14,6 +14,7 @@
     "@fortawesome/free-solid-svg-icons": "^5.12.0",
     "@fortawesome/react-fontawesome": "^0.1.8",
     "knex": "<0.20.0",
+    "lodash.debounce": "^4.0.8",
     "prop-types": "^15.7.2",
     "sqlite3": "latest",
     "strapi": "3.0.0-beta.18.4",
@@ -22,6 +23,7 @@
     "strapi-plugin-content-manager": "3.0.0-beta.18.4",
     "strapi-plugin-content-type-builder": "3.0.0-beta.18.4",
     "strapi-plugin-email": "3.0.0-beta.18.4",
+    "strapi-plugin-graphql": "3.0.0-beta.18.4",
     "strapi-plugin-upload": "3.0.0-beta.18.4",
     "strapi-plugin-users-permissions": "3.0.0-beta.18.4",
     "strapi-utils": "3.0.0-beta.18.4"
