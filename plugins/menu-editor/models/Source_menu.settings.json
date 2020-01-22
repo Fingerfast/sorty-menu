@@ -1,33 +1,18 @@
 {
   "connection": "default",
+  "collectionName": "menu-editor_source_menu",
   "info": {
-    "idAttribute": "uuid",
-    "idAttributeType": "uuid",
     "name": "source_menu",
     "description": ""
   },
   "attributes": {
-    "uuid": {
-      "type": "string",
-      "required": true,
-      "unique": true,
-      "configurable": true
+    "child_index": {
+      "type": "integer"
     },
-    "depth_order": {
-      "type": "integer",
-      "required": true,
-      "unique": false,
-      "configurable": true
-    },
-    "parent_uuid": {
-      "type": "string",
-      "required": false,
-      "unique": false,
-      "configurable": true
+    "parent_id": {
+      "type": "integer"
     },
     "page_id": {
-      "via": "id",
-      "plugin": "content-manager",
       "model": "pages"
     }
   }

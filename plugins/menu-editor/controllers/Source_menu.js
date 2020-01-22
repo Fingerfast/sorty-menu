@@ -13,13 +13,13 @@ module.exports = {
     });
   },
   findOne: async ctx => {
-    const { uuid } = ctx.params
+    const { id } = ctx.params
     const Menu = strapi.plugins['menu-editor'].models.source_menu;
 
     try {
       const sourceMenu = await strapi.plugins['menu-editor'].config
         .queries(Menu)
-        .findOne({uuid});
+        .findOne({id});
       
       ctx.body = sourceMenu;
     } catch (error) {
@@ -41,12 +41,7 @@ module.exports = {
         .queries(Menu)
         .find();
 
-      ctx.body = sourceMenu.serialize().map(({uuid, depth_order, parent_uuid, page_id}) => ({
-        uuid,
-        depth_order,
-        parent_uuid,
-        page_id,
-      }));
+      ctx.body = sourceMenu.serialize()
     } catch (error) {
       console.log('getMenusList error:', error);
       ctx.send(
@@ -58,30 +53,30 @@ module.exports = {
       );
     }
   },
-  putSourceMenu: async ctx => {
-    const menu_items = ctx.request.body
-    const SourceMenu = strapi.plugins['menu-editor'].models.source_menu
+  //saveSourceMenu: async ctx => {
+  //  const menu_items = ctx.request.body
+  //  const SourceMenu = strapi.plugins['menu-editor'].models.source_menu
 
-    try {
-      await strapi.plugins['menu-editor'].config
-        .queries(SourceMenu)
-        .putSourceMenu(menu_items)
+  //  try {
+  //    await strapi.plugins['menu-editor'].config
+  //      .queries(SourceMenu)
+  //      .putSourceMenu(menu_items)
 
-      ctx.send(
-        {
-          message: 'OK',
-        },
-        201
-      );
-    } catch (error) {
-      console.log('putMenuById error:', JSON.stringify(error));
-      ctx.send(
-        {
-          message: 'error',
-          error,
-        },
-        400
-      );
-    }
-  },
+  //    ctx.send(
+  //      {
+  //        message: 'OK',
+  //      },
+  //      201
+  //    );
+  //  } catch (error) {
+  //    console.log('putMenuById error:', JSON.stringify(error));
+  //    ctx.send(
+  //      {
+  //        message: 'error',
+  //        error,
+  //      },
+  //      400
+  //    );
+  //  }
+  //},
 };
