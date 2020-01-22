@@ -5,6 +5,7 @@ import update from 'immutability-helper';
 import nanoid from 'nanoid/non-secure';
 import SortableMenuItem from './SortableMenuItem';
 import styled from 'styled-components';
+import { useHistory } from 'react-router-dom'
 import { Button } from 'strapi-helper-plugin'
 import { useDebounce } from 'use-debounce';
 import debounce from 'lodash/debounce';
@@ -21,6 +22,20 @@ const SortlyWrapper = styled.div`
 `;
 
 export default function SortableMenu ({ menuItems, onChange, editMode }) {
+  console.log('MENU ITEMS ' , menuItems, strapi.router.location)
+
+  const history = useHistory()
+  const pages = "plugins/content-manager/application::pages.pages";
+  const relatedPages = "plugins/content-manager/plugins::menu-editor.source_menu"
+  const myLocation = strapi.router.location.pathname ? strapi.router.location.pathname : '/plugins/menu-editor';
+  const addNewItem = (e) => {
+    e.preventDefault()
+    history.push(`/${pages}/create?redirectUrl=${myLocation}`)
+  }
+  const addNewRelatedItem = (e) => {
+    e.preventDefault()
+    history.push(`/${relatedPages}/create?redirectUrl=${myLocation}`)
+  }
 
   const handleClickAdd = (e) => {
     e.preventDefault();
@@ -41,7 +56,6 @@ export default function SortableMenu ({ menuItems, onChange, editMode }) {
   }
 
   const handleChangeRow = (id) => (e) => {
-    console.log('ID || E' , id, e.target.value)
     const index = menuItems.findIndex(item => item.id === id);
     const { name, value } = e.target;
     onChange(
@@ -59,11 +73,12 @@ export default function SortableMenu ({ menuItems, onChange, editMode }) {
   return (
     <Fragment>
       <ActionsMenu>
-        <Button kind="primary" disabled={!editMode} onClick={handleClickAdd}><FormattedMessage id={'menu-editor.MenuEditor.add'} /></Button>
+        <Button kind="primary" disabled={!editMode} onClick={addNewItem}><FormattedMessage id={'menu-editor.MenuEditor.addNewItem'} /></Button>
+        <Button kind="primary" disabled={!editMode} onClick={addNewRelatedItem}><FormattedMessage id={'menu-editor.MenuEditor.addNewRelatedItem'} /></Button>
         {/*<Button kind="primary" disabled={!editMode} onClick={location.href="/plugins/content-manager/application::pages.pages/create?redirectUrl=/plugins/menu-editor"}>*/}
         {/*</Button>*/}
 
-        <Button kind="secondary" disabled={!editMode} onClick={handleClickAdd}><FormattedMessage id={'menu-editor.MenuEditor.addNewMenu'} /></Button>
+        {/*<Button kind="secondary" disabled={!editMode} onClick={handleClickAdd}><FormattedMessage id={'menu-editor.MenuEditor.addNewMenu'} /></Button>*/}
       </ActionsMenu>
       <SortlyWrapper>
         <Sortly

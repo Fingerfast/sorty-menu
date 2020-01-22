@@ -1,5 +1,5 @@
-import React from 'react';
-import { DndProvider } from 'react-dnd';
+import React, {useRef} from 'react';
+import { DndProvider, createDndContext } from 'react-dnd';
 import HTML5Backend from 'react-dnd-html5-backend';
 import { ContextProvider } from 'react-sortly';
 import { FormattedMessage } from 'react-intl';
@@ -11,15 +11,17 @@ const Wrapper = styled.div`
   flex-direction: column;
 `;
 
+
 export default function MenuEditor ({ onChange, editMode, menuItems}) {
+  const manager = useRef(createDndContext(HTML5Backend))
 
   return (
     <Wrapper>
-      <DndProvider backend={HTML5Backend}>
+      <DndProvider manager={manager.current.dragDropManager} backend={HTML5Backend}>
         <ContextProvider>
           <SortableMenu editMode={editMode} onChange={onChange} menuItems={menuItems}/>
         </ContextProvider>
-      </DndProvider>
+      </DndProvider >
     </Wrapper>
   );
 };
