@@ -7,7 +7,7 @@ import { Button } from 'strapi-helper-plugin';
 import debounce from 'lodash/debounce';
 import {useHistory} from 'react-router-dom';
 import {
-  faTrash,
+  faPen,
   faArrowsAlt,
 } from '@fortawesome/free-solid-svg-icons';
 
@@ -58,6 +58,28 @@ const DraggingIcon = styled.div`
   }
 `;
 
+const EditIcon = styled.div`
+  cursor: ${props => props.editMode ? 'move' : 'normal'};
+  display: flex;
+  flex: 0 1 auto;
+  padding: 5px;
+  border-radius: 5px;
+  justify-content: center;
+  align-items: center;
+  margin-right: 10px;
+  transition: 0.3s ease-in-out;
+  > svg {
+    font-size: 1.6em;
+    color: black;
+    }
+  }
+  &:hover {
+    background: #6c757d;
+    //border-radius: 50%;
+    //padding: 10px;
+  }
+`;
+
 export default function SortableMenuItem ({ id, depth, data: { name, page_id }, editMode }) {
   const [{ isDragging }, drag, preview] = useDrag({
     collect: (monitor) => ({ isDragging: monitor.isDragging() })
@@ -79,9 +101,13 @@ export default function SortableMenuItem ({ id, depth, data: { name, page_id }, 
     <div onClick={editItem(page_id)} ref={(ref) => drop(preview(ref))}>
       <div>
         <Item ref={editMode ? drag : null} style={{ marginLeft: depth * 30 }} key={id} title="Show details">
-          <DraggingIcon  depth={depth} editMode={editMode}>
+          <DraggingIcon title={editMode ? 'Přetáhní položku na požadované místo' : 'Přepni do Editmodu'} depth={depth} editMode={editMode}>
             <FontAwesomeIcon icon={faArrowsAlt}/>
           </DraggingIcon>
+          <EditIcon title={'Editovat položku'}>
+            <FontAwesomeIcon icon={faPen}/>
+          </EditIcon>
+
           <Label>{name.charAt(0).toUpperCase() + name.slice(1)}</Label>
         </Item>
       </div>
