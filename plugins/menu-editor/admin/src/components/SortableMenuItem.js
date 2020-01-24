@@ -67,6 +67,7 @@ export default function SortableMenuItem ({ id, depth, data: { name, page_id }, 
 
   const history = useHistory()
   const pluginPages = "plugins/content-manager/application::pages.pages";
+  const pluginSourceMenus = "plugins/content-manager/plugins::menu-editor.source_menu";
   const myLocation = strapi.router.location.pathname ? strapi.router.location.pathname : '/plugins/menu-editor';
 
   const editItem = (page_id) => (e) => {
@@ -78,7 +79,9 @@ export default function SortableMenuItem ({ id, depth, data: { name, page_id }, 
     <div onClick={editItem(page_id)} ref={(ref) => drop(preview(ref))}>
       <div>
         <Item ref={editMode ? drag : null} style={{ marginLeft: depth * 30 }} key={id} title="Show details">
-          <DraggingIcon  depth={depth} editMode={editMode}><FontAwesomeIcon icon={faArrowsAlt}/></DraggingIcon>
+          <DraggingIcon  depth={depth} editMode={editMode}>
+            <FontAwesomeIcon icon={faArrowsAlt}/>
+          </DraggingIcon>
           <Label>{name.charAt(0).toUpperCase() + name.slice(1)}</Label>
         </Item>
       </div>
