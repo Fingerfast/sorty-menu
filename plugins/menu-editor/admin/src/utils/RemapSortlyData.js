@@ -8,7 +8,6 @@ export const remapSortlyInput = databaseOutput => {
       page_id: { Name },
       page_id,
     } = row;
-    console.log(row)
     return {
       id,
       index: child_index,
