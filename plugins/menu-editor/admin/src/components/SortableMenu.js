@@ -1,4 +1,4 @@
-import React, {Fragment} from 'react';
+import React, {Fragment, useCallback} from 'react';
 import Sortly, {remove, add} from 'react-sortly';
 import { FormattedMessage } from 'react-intl';
 import update from 'immutability-helper';
@@ -9,6 +9,8 @@ import { useHistory } from 'react-router-dom'
 import { Button } from 'strapi-helper-plugin'
 import { useDebounce } from 'use-debounce';
 import debounce from 'lodash/debounce';
+import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
+import {faPlus} from "@fortawesome/free-solid-svg-icons";
 
 const ActionsMenu = styled.div`
   display: flex;
@@ -36,7 +38,6 @@ export default function SortableMenu ({ menuItems, onChange, editMode }) {
     e.preventDefault()
     history.push(`/${relatedPages}/create?redirectUrl=${myLocation}`)
   }
-
   const handleClickAdd = (e) => {
     e.preventDefault();
     onChange('menuItems', add(menuItems, {
@@ -51,20 +52,20 @@ export default function SortableMenu ({ menuItems, onChange, editMode }) {
     onChange('menuItems', remove(menuItems, index));
   };
 
-  function deb(name,index,value) {
+  // const handleChangeRow = (id) => (e) => {
+  //   const index = menuItems.findIndex(item => item.id === id);
+  //   const { name, value } = e.target;
+  //   onChange(
+  //     'menuItems',
+  //     update(menuItems, {
+  //       [index]: { [name]: { $set: value }},
+  //     })
+  //   )
+  // };
 
-  }
+  const handleChangeRow = useCallback(() => {
 
-  const handleChangeRow = (id) => (e) => {
-    const index = menuItems.findIndex(item => item.id === id);
-    const { name, value } = e.target;
-    onChange(
-      'menuItems',
-      update(menuItems, {
-        [index]: { [name]: { $set: value }},
-      })
-    )
-  };
+  }, [])
 
   const handleSortly = (newItems) => {
     onChange('menuItems', newItems);
@@ -73,13 +74,14 @@ export default function SortableMenu ({ menuItems, onChange, editMode }) {
   return (
     <Fragment>
       <ActionsMenu>
-        <Button kind="primary" disabled={!editMode} onClick={addNewItem}><FormattedMessage id={'menu-editor.MenuEditor.addNewItem'} /></Button>
-        <Button kind="primary" disabled={!editMode} onClick={addNewRelatedItem}><FormattedMessage id={'menu-editor.MenuEditor.addNewRelatedItem'} /></Button>
+        <Button title={editMode ? 'Add new page' : 'You must be in "Edit mode"'} kind={editMode ? "primary" : "secondary"} disabled={!editMode} onClick={addNewItem}><FormattedMessage id={'menu-editor.MenuEditor.addNewItem'}/></Button>
+        {/*<Button kind="primary" disabled={!editMode} onClick={addNewRelatedItem}><FormattedMessage id={'menu-editor.MenuEditor.addNewRelatedItem'} /></Button>*/}
         {/*<Button kind="primary" disabled={!editMode} onClick={location.href="/plugins/content-manager/application::pages.pages/create?redirectUrl=/plugins/menu-editor"}>*/}
         {/*</Button>*/}
 
         {/*<Button kind="secondary" disabled={!editMode} onClick={handleClickAdd}><FormattedMessage id={'menu-editor.MenuEditor.addNewMenu'} /></Button>*/}
       </ActionsMenu>
+      <Button title={editMode ? 'Add new item in structure' : 'You must be in "Edit mode"'} disabled={!editMode} onClick={handleClickAdd} style={editMode ? {color: 'black'} : {color: 'grey'}}><FontAwesomeIcon icon={faPlus}/>Vytvořit položku ve struktuře</Button>
       <SortlyWrapper>
         <Sortly
           items={menuItems}
@@ -90,6 +92,7 @@ export default function SortableMenu ({ menuItems, onChange, editMode }) {
           )}
         </Sortly>
       </SortlyWrapper>
+
     </Fragment>
   );
 };

@@ -9,6 +9,12 @@ import { onChange, submit, getMenu} from '../redux/actions';
 import reducer from '../redux/reducer';
 import saga from '../redux/saga';
 import selectMenuEditorPlugin from '../redux/selectors';
+import styled from 'styled-components'
+
+const Hint = styled.div`
+  font-size: 1em;
+  margin-bottom: 10px;
+`
 
 class MenuEditorPlugin extends React.Component {
   constructor(props) {
@@ -47,7 +53,7 @@ class MenuEditorPlugin extends React.Component {
   ];
   actionEdit = [
     {
-      kind: 'secondary',
+      kind: 'primary',
       label: 'menu-editor.MenuEditor.editMode',
       onClick: () => this.setState({editMode: true}),
       type: 'button',
@@ -64,6 +70,7 @@ class MenuEditorPlugin extends React.Component {
               description={{id: 'menu-editor.MenuEditor.description'}}
               actions={this.state.editMode ? this.pluginHeaderActions : this.actionEdit}
             />
+            <Hint>Pozn.: Pro editaci stuktury webu přepnout do "Edit modu".</Hint>
             <MenuEditor
               menuItems={this.props.menuItems}
               modifiedMenuItemsData={this.props.modifiedMenuItemsData}
