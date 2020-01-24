@@ -37,11 +37,16 @@ class MenuEditorPlugin extends React.Component {
     return this.props.submit();
   };
 
+  cancelEditMode = () => {
+    this.props.getMenu();
+    this.setState({editMode: false})
+  }
+
   pluginHeaderActions = [
     {
       kind: 'secondary',
       label: 'menu-editor.MenuEditor.cancelEditMode',
-      onClick: () => this.setState({editMode: false}),
+      onClick: this.cancelEditMode,
       type: 'button',
     },
     {

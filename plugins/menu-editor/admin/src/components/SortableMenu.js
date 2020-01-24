@@ -14,6 +14,11 @@ import {faPlus} from "@fortawesome/free-solid-svg-icons";
 
 const ActionsMenu = styled.div`
   display: flex;
+  > button {
+    > svg {
+      font-size: 1.4em;
+    }
+  }
 `;
 
 const SortlyWrapper = styled.div`
@@ -42,7 +47,7 @@ export default function SortableMenu ({ menuItems, onChange, editMode }) {
     e.preventDefault();
     onChange('menuItems', add(menuItems, {
       id: nanoid(12),
-      name: '',
+      name: 'Nová položka ' + menuItems.length,
     }));
   };
 
@@ -74,14 +79,14 @@ export default function SortableMenu ({ menuItems, onChange, editMode }) {
   return (
     <Fragment>
       <ActionsMenu>
-        <Button title={editMode ? 'Add new page' : 'You must be in "Edit mode"'} kind={editMode ? "primary" : "secondary"} disabled={!editMode} onClick={addNewItem}><FormattedMessage id={'menu-editor.MenuEditor.addNewItem'}/></Button>
+        {/*<Button title={editMode ? 'Add new page' : 'You must be in "Edit mode"'} kind={editMode ? "primary" : "secondary"} disabled={!editMode} onClick={addNewItem}><FormattedMessage id={'menu-editor.MenuEditor.addNewItem'}/></Button>*/}
         {/*<Button kind="primary" disabled={!editMode} onClick={addNewRelatedItem}><FormattedMessage id={'menu-editor.MenuEditor.addNewRelatedItem'} /></Button>*/}
         {/*<Button kind="primary" disabled={!editMode} onClick={location.href="/plugins/content-manager/application::pages.pages/create?redirectUrl=/plugins/menu-editor"}>*/}
         {/*</Button>*/}
 
         {/*<Button kind="secondary" disabled={!editMode} onClick={handleClickAdd}><FormattedMessage id={'menu-editor.MenuEditor.addNewMenu'} /></Button>*/}
+        <Button title={editMode ? 'Add new item in structure' : 'You must be in "Edit mode"'} disabled={!editMode} onClick={handleClickAdd} style={editMode ? {color: 'black', border: '1px solid #0097f6', borderRadius: '5px'} : {color: 'grey'}}><FontAwesomeIcon icon={faPlus}/>Vytvořit položku ve struktuře</Button>
       </ActionsMenu>
-      <Button title={editMode ? 'Add new item in structure' : 'You must be in "Edit mode"'} disabled={!editMode} onClick={handleClickAdd} style={editMode ? {color: 'black'} : {color: 'grey'}}><FontAwesomeIcon icon={faPlus}/>Vytvořit položku ve struktuře</Button>
       <SortlyWrapper>
         <Sortly
           items={menuItems}
