@@ -74,34 +74,14 @@ const EditIcon = styled.div`
   }
   &:hover {
     background: #6c757d;
-    //border-radius: 50%;
-    //padding: 10px;
   }
 `;
 
-export default function SortableMenuItem ({ id, depth, name, pageId, handleChangeRow, handleReturn, editMode, onClickItemDetail }) {
+export default function SortableMenuItem ({ id, depth, name, pageId, editMode, onItemEdit, onItemMove, onItemAdd, onPressEnter, onClickItemDetail }) {
   const [{ isDragging }, drag, preview] = useDrag({
     collect: (monitor) => ({ isDragging: monitor.isDragging() })
   });
   const [, drop] = useDrop();
-
-  const [inputValue, setInputValue] = useState(name)
-
-  const handleClickMenuItem = (id) => (e) => {
-    console.log("KOKOT" , id)
-    onClickItemDetail(id)
-  }
-
-  const handleInputValue = (id) => (e) => {
-    console.log("sdsdsdsd")
-    setInputValue(e.target.value)
-    handleChangeRow(id, e.target.value)
-  }
-
-  const handleKeyDown = (e) => {
-    // e.preventDefault()
-    if(e.ctrlKey && e.key === 'Enter') handleReturn(id)
-  }
 
   return (
     <div /*onClick={editItem(pageId)}*/ ref={(ref) => drop(preview(ref))}>
@@ -109,13 +89,12 @@ export default function SortableMenuItem ({ id, depth, name, pageId, handleChang
         <DraggingIcon title={editMode ? 'Přetáhní položku na požadované místo' : 'Přepni do Editmodu'} depth={depth} editMode={editMode}>
           <FontAwesomeIcon icon={faArrowsAlt}/>
         </DraggingIcon>
-        <div onClick={handleClickMenuItem(pageId)}>
+        <div onClick={onClickItemDetail(pageId)}>
           <EditIcon title={'Editovat položku'}>
             <FontAwesomeIcon icon={faPen}/>
           </EditIcon>
         </div>
-        <input style={{width: '100%', padding: '5px 10px'}} value={inputValue} onChange={handleInputValue(id)} onKeyDown={handleKeyDown}/>
-        {/*<Label>{name.charAt(0).toUpperCase() + name.slice(1)}</Label>*/}
+        <input style={{width: '100%', padding: '5px 10px'}} value={name} onChange={onItemEdit(id, 'name')}  />
       </Item>
     </div>
   );
