@@ -1,11 +1,10 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import styled from 'styled-components';
 import { useDebouncedCallback } from 'use-debounce';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useDrag, useDrop } from 'react-sortly';
 import { Button } from 'strapi-helper-plugin';
 import debounce from 'lodash/debounce';
-import {useHistory} from 'react-router-dom';
 import {
   faPen,
   faArrowsAlt,
@@ -80,37 +79,44 @@ const EditIcon = styled.div`
   }
 `;
 
-export default function SortableMenuItem ({ id, depth, data: { name, page_id }, editMode }) {
+export default function SortableMenuItem ({ id, depth, name, pageId, handleChangeRow, handleReturn, editMode, onClickItemDetail }) {
   const [{ isDragging }, drag, preview] = useDrag({
     collect: (monitor) => ({ isDragging: monitor.isDragging() })
   });
-
   const [, drop] = useDrop();
 
-  const history = useHistory()
-  const pluginPages = "plugins/content-manager/application::pages.pages";
-  const pluginSourceMenus = "plugins/content-manager/plugins::menu-editor.source_menu";
-  const myLocation = strapi.router.location.pathname ? strapi.router.location.pathname : '/plugins/menu-editor';
+  const [inputValue, setInputValue] = useState(name)
 
-  const editItem = (page_id) => (e) => {
-    e.preventDefault()
-    history.push(`/${pluginPages}/${page_id}?redirectUrl=${myLocation}`)
+  const handleClickMenuItem = (id) => (e) => {
+    console.log("KOKOT" , id)
+    onClickItemDetail(id)
+  }
+
+  const handleInputValue = (id) => (e) => {
+    console.log("sdsdsdsd")
+    setInputValue(e.target.value)
+    handleChangeRow(id, e.target.value)
+  }
+
+  const handleKeyDown = (e) => {
+    // e.preventDefault()
+    if(e.ctrlKey && e.key === 'Enter') handleReturn(id)
   }
 
   return (
-    <div onClick={editItem(page_id)} ref={(ref) => drop(preview(ref))}>
-      <div>
-        <Item ref={editMode ? drag : null} style={{ marginLeft: depth * 30 }} key={id} title="Show details">
-          <DraggingIcon title={editMode ? 'Přetáhní položku na požadované místo' : 'Přepni do Editmodu'} depth={depth} editMode={editMode}>
-            <FontAwesomeIcon icon={faArrowsAlt}/>
-          </DraggingIcon>
+    <div /*onClick={editItem(pageId)}*/ ref={(ref) => drop(preview(ref))}>
+      <Item ref={editMode ? drag : null} style={{ marginLeft: depth * 30 }} key={id} title="Show details">
+        <DraggingIcon title={editMode ? 'Přetáhní položku na požadované místo' : 'Přepni do Editmodu'} depth={depth} editMode={editMode}>
+          <FontAwesomeIcon icon={faArrowsAlt}/>
+        </DraggingIcon>
+        <div onClick={handleClickMenuItem(pageId)}>
           <EditIcon title={'Editovat položku'}>
             <FontAwesomeIcon icon={faPen}/>
           </EditIcon>
-
-          <Label>{name.charAt(0).toUpperCase() + name.slice(1)}</Label>
-        </Item>
-      </div>
+        </div>
+        <input style={{width: '100%', padding: '5px 10px'}} value={inputValue} onChange={handleInputValue(id)} onKeyDown={handleKeyDown}/>
+        {/*<Label>{name.charAt(0).toUpperCase() + name.slice(1)}</Label>*/}
+      </Item>
     </div>
   );
 };
