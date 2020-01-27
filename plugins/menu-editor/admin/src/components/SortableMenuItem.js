@@ -1,10 +1,7 @@
-import React, { useEffect, useState, useCallback } from "react";
+import React, {useCallback} from "react";
 import styled from 'styled-components';
-import { useDebouncedCallback } from 'use-debounce';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useDrag, useDrop } from 'react-sortly';
-import { Button } from 'strapi-helper-plugin';
-import debounce from 'lodash/debounce';
 import {
   faPen,
   faArrowsAlt,
@@ -21,25 +18,11 @@ const Item = styled.div`
   padding: 5px;
   background: rgb(255, 255, 255);
   &:hover {
-    cursor: pointer;
+    //cursor: pointer;
     background: #cccccc;
   }
 `;
-const TrashIcon = styled.div`
-  display: flex;
-  align-items: center;
-  > svg {
-    font-size: 1.5em;
-    color: ${props => props.editMode ? 'black' : '#e2e2e2'}
-  }
-`;
-const Label = styled.div`
-  flex: 1 0 auto;
-  //border: 1px solid #aed4fb;
-  //background-color: white;
-  //text-transform: capitalize;
-  font-size: 1.2em;
-`;
+
 const DraggingIcon = styled.div`
   cursor: ${props => props.editMode ? 'move' : 'normal'};
   display: flex;
@@ -77,24 +60,36 @@ const EditIcon = styled.div`
   }
 `;
 
-export default function SortableMenuItem ({ id, depth, name, pageId, editMode, onItemEdit, onItemMove, onItemAdd, onPressEnter, onClickItemDetail }) {
+export default function SortableMenuItem ({ id, depth, value, onChange, onClick, onKeyDown, editMode }) {
   const [{ isDragging }, drag, preview] = useDrag({
     collect: (monitor) => ({ isDragging: monitor.isDragging() })
   });
   const [, drop] = useDrop();
 
+  const handleClick = useCallback((e) => {
+    onClick(id)
+  }, [onClick]);
+
+  const handleChange = useCallback((e) => {
+    onChange(id, e.target.value)
+  }, [onChange]);
+
+  const handleKeyDown = useCallback((e) => {
+    onKeyDown(id, e)
+  }, [onKeyDown]);
+
   return (
-    <div /*onClick={editItem(pageId)}*/ ref={(ref) => drop(preview(ref))}>
+    <div ref={(ref) => drop(preview(ref))}>
       <Item ref={editMode ? drag : null} style={{ marginLeft: depth * 30 }} key={id} title="Show details">
         <DraggingIcon title={editMode ? 'Přetáhní položku na požadované místo' : 'Přepni do Editmodu'} depth={depth} editMode={editMode}>
           <FontAwesomeIcon icon={faArrowsAlt}/>
         </DraggingIcon>
-        <div onClick={onClickItemDetail(pageId)}>
+        <div onClick={handleClick}>
           <EditIcon title={'Editovat položku'}>
             <FontAwesomeIcon icon={faPen}/>
           </EditIcon>
         </div>
-        <input style={{width: '100%', padding: '5px 10px'}} value={name} onChange={onItemEdit(id, 'name')}  />
+        <input style={{width: '100%', padding: '5px 10px'}} value={value} onChange={handleChange} onKeyDown={handleKeyDown}/>
       </Item>
     </div>
   );
