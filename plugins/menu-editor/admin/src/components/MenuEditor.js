@@ -1,75 +1,55 @@
-import React, {useRef , useCallback} from 'react';
-import { DndProvider, createDndContext } from 'react-dnd';
+import React, { useCallback, useRef } from 'react';
+import { createDndContext, DndProvider } from 'react-dnd';
 import HTML5Backend from 'react-dnd-html5-backend';
-import {add, ContextProvider, insert} from 'react-sortly';
-import { FormattedMessage } from 'react-intl';
+import { ContextProvider } from 'react-sortly';
 import SortableMenu from './SortableMenu';
 import styled from 'styled-components';
-import {useHistory} from 'react-router-dom';
-import nanoid from "nanoid/non-secure";
-import update from "immutability-helper";
+import { useHistory } from 'react-router-dom';
+import nanoid from 'nanoid/non-secure';
 
 const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
 `;
 
-export default function MenuEditor ({ onChange, editMode, menuItems}) {
-  const manager = useRef(createDndContext(HTML5Backend))
-  const history = useHistory()
-  const myLocation = strapi.router.location.pathname ? strapi.router.location.pathname : '/plugins/menu-editor';
+function createNewItem(items) {
+  return {
+    id: nanoid(12),
+    name: 'Nová položka ' + items.length,
+    isNew: true
+  };
+}
 
-  const onClickItemDetail = (pageId) => (e) => {
-    const pluginPages = "plugins/content-manager/application::pages.pages";
-    e.preventDefault()
-    history.push(`/${pluginPages}/${pageId}?redirectUrl=${myLocation}`)
-  }
+export default function MenuEditor({ onChange, editMode, menuItems }) {
+  // const pluginSourceMenus = "plugins/content-manager/plugins::menu-editor.source_menu";
 
-  const onItemAdd = useCallback((e) => {
-    console.log("ON ITEM ADD---")
-    e.preventDefault();
-    onChange('menuItems', add(menuItems, {
-      id: nanoid(12),
-      name: 'Nová položka ' + menuItems.length,
-    }));
-  }, [onChange, menuItems]);
+  const history = useHistory();
+  const location = strapi.router.location.pathname ? strapi.router.location.pathname : '/plugins/menu-editor';
+  const pluginPages = 'plugins/content-manager/application::pages.pages';
 
-  const onItemEdit = useCallback((id, key) => (e) =>{
-    const index = menuItems.findIndex(item => item.id === id);
-    const {name, value} = e.target
-    console.log("ON ITEM EDIT--- ID::VALUE::", id , value)
-
-    onChange(
-      'menuItems',
-      update(menuItems, {
-        [index]: { [key]: { $set: value }},
-      })
-    )
-  }, [onChange, menuItems]);
-
-  const onItemMove = useCallback((newItems) => {
-    onChange('menuItems', newItems);
+  const handleChange = useCallback((items) => {
+    onChange('menuItems', items);
   }, [onChange]);
 
-  const onPressEnter = (id) => {
-    const index = menuItems.findIndex(item => item.id === id);
-    onChange(
-      'menuItems',
-      insert(menuItems, {
-        id: nanoid(12),
-        name: 'Nový záznam ' + menuItems.length,
-        isNew: true,
-      }, index))
-  };
+  const handleItemClick = useCallback((item) => {
+    history.push(`/${pluginPages}/${item.page_id}?redirectUrl=${location}`);
+  }, [onChange]);
+
+  const manager = useRef(createDndContext(HTML5Backend));
 
   return (
     <Wrapper>
       <DndProvider manager={manager.current.dragDropManager} backend={HTML5Backend}>
         <ContextProvider>
-          <SortableMenu editMode={editMode} {... {onItemEdit, onItemMove, onItemAdd, onPressEnter, onClickItemDetail}} menuItems={menuItems} />
+          <SortableMenu
+            itemCreator={createNewItem}
+            editMode={editMode}
+            items={menuItems}
+            onChange={handleChange}
+            onItemClick={handleItemClick}
+          />
         </ContextProvider>
-      </DndProvider >
+      </DndProvider>
     </Wrapper>
   );
 };
-

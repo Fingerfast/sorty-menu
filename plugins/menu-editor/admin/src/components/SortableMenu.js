@@ -1,11 +1,8 @@
-import React, {Fragment, useCallback, useState, useEffect} from 'react';
+import React, { Fragment, useCallback } from 'react';
 import Sortly, { add, insert } from 'react-sortly';
-import { FormattedMessage } from 'react-intl';
 import update from 'immutability-helper';
-import nanoid from 'nanoid/non-secure';
 import SortableMenuItem from './SortableMenuItem';
 import styled from 'styled-components';
-import { useHistory } from 'react-router-dom'
 import { Button } from 'strapi-helper-plugin'
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faPlus} from "@fortawesome/free-solid-svg-icons";
@@ -26,47 +23,63 @@ const SortlyWrapper = styled.div`
   margin-top: 10px;
 `;
 
-export default function SortableMenu ({ menuItems, editMode, onItemAdd, onItemEdit, onItemMove, onPressEnter, onClickItemDetail }) {
-  console.log('MENU ITEMS ' , menuItems)
+export default function SortableMenu({ itemCreator, items, onChange, onItemClick, editMode }) {
 
-  // SET URL LOCATION FOR REDIRECT BACK HERE FROM CREATE PAGES
-  // const history = useHistory()
-  // const myLocation = strapi.router.location.pathname || '/plugins/menu-editor';
+  const handleCreateItem = useCallback(() => {
+    const item = itemCreator(items);
+    onChange(add(items, item));
+  }, [items, onChange]);
 
-  // BUTTON FOR CREATE NEW PAGE
-  // const pages = "plugins/content-manager/application::pages.pages";
-  // const addNewItem = (e) => {
-  //   e.preventDefault()
-  //   history.push(`/${pages}/create?redirectUrl=${myLocation}`)
-  // }
+  const handleUpdateItem = useCallback((id, value) => {
+    const index = items.findIndex(item => item.id === id);
+    onChange(update(items, {
+      [index]: { name: { $set: value } }
+    }));
+  }, [items, onChange]);
 
-  // BUTTON FOR CREATE RELATED ITEM IN STRUKTURE
-  // const relatedPages = "plugins/content-manager/plugins::menu-editor.source_menu"
-  // const addNewRelatedItem = (e) => {
-  //   e.preventDefault()
-  //   history.push(`/${relatedPages}/create?redirectUrl=${myLocation}`)
-  // }
+  const handleClickOnItem = useCallback((id) => {
+    const item = items.find(item => item.id === id);
+    onItemClick(item);
+  }, [onItemClick, items]);
+
+  const handleKeyDown = useCallback((id, e) => {
+    if(e.ctrlKey && e.key === 'Enter') {
+      const index = items.findIndex(item => item.id === id);
+      const item = itemCreator(items);
+      onChange(insert(items, item, index));
+    }
+  }, [onChange, items]);
 
   return (
     <Fragment>
       <ActionsMenu>
-        {/*<Button title={editMode ? 'Add new page' : 'You must be in "Edit mode"'} kind={editMode ? "primary" : "secondary"} disabled={!editMode} onClick={addNewItem}><FormattedMessage id={'menu-editor.MenuEditor.addNewItem'}/></Button>*/}
-        {/*<Button kind="primary" disabled={!editMode} onClick={addNewRelatedItem}><FormattedMessage id={'menu-editor.MenuEditor.addNewRelatedItem'} /></Button>*/}
-        <Button kind="primary" title={editMode ? 'Add new item in structure' : 'You must be in "Edit mode"'} disabled={!editMode} onClick={onItemAdd} style={editMode ? {color: 'black', border: '1px solid #0097f6', borderRadius: '5px'} : {color: 'grey'}}><FontAwesomeIcon icon={faPlus}/>Vytvořit položku ve struktuře</Button>
+        <Button kind="primary" title={editMode ? 'Add new item in structure' : 'You must be in "Edit mode"'} disabled={!editMode}
+                onClick={handleCreateItem} style={editMode ? {
+          color: 'black',
+          border: '1px solid #0097f6',
+          borderRadius: '5px'
+        } : { color: 'grey' }}><FontAwesomeIcon icon={faPlus} />Vytvořit položku ve struktuře</Button>
       </ActionsMenu>
-      {menuItems ?
+      {items.length > 0 ?
         <SortlyWrapper>
           <Sortly
-            items={menuItems}
-            onChange={onItemMove}
+            items={items}
+            onChange={onChange}
           >
             {(props) => (
-              <SortableMenuItem {...{ onItemAdd, onItemEdit, onItemMove, onPressEnter, onClickItemDetail }} id={props.data.id} pageId={props.data.page_id} name={props.data.name} depth={props.depth} editMode={editMode}/>
+              <SortableMenuItem
+                id={props.data.id}
+                value={props.data.name}
+                depth={props.depth}
+                editMode={editMode}
+                onClick={handleClickOnItem}
+                onChange={handleUpdateItem}
+                onKeyDown={handleKeyDown}
+              />
             )}
           </Sortly>
-        </SortlyWrapper>:
+        </SortlyWrapper> :
         <div>loading...</div>}
     </Fragment>
   );
 };
-
