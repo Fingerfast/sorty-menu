@@ -79,8 +79,8 @@ class MenuEditorPlugin extends React.Component {
             <MenuEditor
               menuItems={this.props.menuItems}
               modifiedMenuItemsData={this.props.modifiedMenuItemsData}
-              // editMode={this.state.editMode}
-              editMode={true}
+              editMode={this.state.editMode}
+              // editMode={true}
               onChange={this.props.onChange}
             />
           </ContainerFluid>

@@ -1,4 +1,4 @@
-import React, { Fragment, useCallback } from 'react';
+import React, {Fragment, useCallback, memo, useRef, useEffect} from 'react';
 import Sortly, { add, insert } from 'react-sortly';
 import update from 'immutability-helper';
 import SortableMenuItem from './SortableMenuItem';
@@ -11,7 +11,7 @@ const ActionsMenu = styled.div`
   display: flex;
   > button {
     > svg {
-      font-size: 1.4em;
+      font-size: 2em;
     }
   }
 `;
@@ -23,63 +23,78 @@ const SortlyWrapper = styled.div`
   margin-top: 10px;
 `;
 
-export default function SortableMenu({ itemCreator, items, onChange, onItemClick, editMode }) {
+export default memo(function SortableMenu({ itemCreator, items, onChange, onItemClick, editMode }) {
 
-  const handleCreateItem = useCallback(() => {
+  // Click on "add new" empty item with generate name
+  const handleCreateItem = useCallback((items) => () => {
     const item = itemCreator(items);
     onChange(add(items, item));
-  }, [items, onChange]);
+  }, [onChange]);
 
-  const handleUpdateItem = useCallback((id, value) => {
+  // Handle changing name in item's inputs
+  const handleUpdateItem = useCallback((items) => (id, value) => {
     const index = items.findIndex(item => item.id === id);
     onChange(update(items, {
       [index]: { name: { $set: value } }
     }));
-  }, [items, onChange]);
+  }, [onChange]);
 
-  const handleClickOnItem = useCallback((id) => {
+  // Click for show details about item (item.page_id can be used for route to any detail page)
+  const handleClickOnItem = useCallback((items) => (id) => {
     const item = items.find(item => item.id === id);
     onItemClick(item);
-  }, [onItemClick, items]);
+  }, [onItemClick]);
 
-  const handleKeyDown = useCallback((id, e) => {
+  // CTRL+ENTER add new item under focused input and keep the same depth
+  const handleKeyDown = useCallback((items) => (id, e) => {
     if(e.ctrlKey && e.key === 'Enter') {
       const index = items.findIndex(item => item.id === id);
       const item = itemCreator(items);
       onChange(insert(items, item, index));
     }
-  }, [onChange, items]);
+  }, [onChange]);
+
+  // Focus latest added input
+  const ref = useRef(null)
+  useEffect(() => {
+    ref.current && ref.current.focus()
+  }, [ ref, items])
 
   return (
     <Fragment>
       <ActionsMenu>
         <Button kind="primary" title={editMode ? 'Add new item in structure' : 'You must be in "Edit mode"'} disabled={!editMode}
-                onClick={handleCreateItem} style={editMode ? {
-          color: 'black',
+                onClick={handleCreateItem(items)} style={editMode ? {
+          color: 'white',
           border: '1px solid #0097f6',
-          borderRadius: '5px'
+          borderRadius: '5px',
+          height: '3.5em',
+          fontSize: '16px',
+          lineHeight: '2.5em',
+          display: 'flex',
+          alignItems: 'center',
         } : { color: 'grey' }}><FontAwesomeIcon icon={faPlus} />Vytvořit položku ve struktuře</Button>
       </ActionsMenu>
-      {items.length > 0 ?
-        <SortlyWrapper>
-          <Sortly
-            items={items}
-            onChange={onChange}
-          >
-            {(props) => (
-              <SortableMenuItem
-                id={props.data.id}
-                value={props.data.name}
-                depth={props.depth}
-                editMode={editMode}
-                onClick={handleClickOnItem}
-                onChange={handleUpdateItem}
-                onKeyDown={handleKeyDown}
-              />
-            )}
-          </Sortly>
-        </SortlyWrapper> :
-        <div>loading...</div>}
+
+      <SortlyWrapper>
+        <Sortly
+          items={items}
+          onChange={onChange}
+        >
+          {(props) => (
+            <SortableMenuItem
+              id={props.data.id}
+              value={props.data.name}
+              depth={props.depth}
+              editMode={editMode}
+              onClick={handleClickOnItem(items)}
+              onChange={handleUpdateItem(items)}
+              onKeyDown={handleKeyDown(items)}
+              myRef={ref}
+            />
+          )}
+        </Sortly>
+      </SortlyWrapper>
     </Fragment>
   );
-};
+});
