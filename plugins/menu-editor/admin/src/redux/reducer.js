@@ -33,16 +33,6 @@ function menuEditorReducer(state = initialState, action) {
         state
           .update('modifiedMenuItemsData', () => [])
       );
-    case UNDO:
-      return (
-        state
-          .update('modifiedMenuItemsData', () => [])
-      );
-    case REDO:
-      return (
-        state
-          .update('modifiedMenuItemsData', () => [])
-      );
     case ON_CHANGE:
       return (
         state

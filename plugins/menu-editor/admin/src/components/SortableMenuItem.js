@@ -17,8 +17,14 @@ const Item = styled.div`
   align-items: center;
   padding: 5px;
   background: rgb(255, 255, 255);
+  input {
+    width: 100%;
+    padding: 5px 10px;
+    &:hover {
+      outline: ${props => props.editMode ? '1px solid #6c757d' : 'none' };
+    }
+  }
   &:hover {
-    //cursor: pointer;
     background: #cccccc;
   }
 `;
@@ -33,15 +39,13 @@ const DraggingIcon = styled.div`
   justify-content: center;
   align-items: center;
   margin-right: 10px;
-  // ${props => props.depth === 0 && "background: #e2e2e2;"};
   > svg {
-    font-size: 2em;
-    color: ${props => props.editMode ? 'black' : '#e2e2e2'}
+      font-size: 2em;
+      color: ${props => props.editMode ? 'black' : '#e2e2e2'}
   }
 `;
 
 const EditIcon = styled.div`
-  cursor: ${props => props.editMode ? 'move' : 'normal'};
   display: flex;
   flex: 0 1 auto;
   padding: 5px;
@@ -50,47 +54,49 @@ const EditIcon = styled.div`
   align-items: center;
   margin-right: 10px;
   transition: 0.3s ease-in-out;
+  cursor: pointer;
   > svg {
-    font-size: 1.6em;
-    color: black;
+      font-size: 1.6em;
+      color: black;
     }
-  }
   &:hover {
     background: #6c757d;
   }
 `;
 
-export default memo(function SortableMenuItem ({ id, depth, value, onChange, onClick, onKeyDown, editMode, myRef }) {
-  // console.log("ITEM RERENDER", id)
+export default memo(function SortableMenuItem ({ id, depth, value, onChange, onClick, onKeyDown, editMode, myRef, isNew }) {
+
+  // DnD for Sortly
   const [{ isDragging }, drag, preview] = useDrag({
     collect: (monitor) => ({ isDragging: monitor.isDragging() })
   });
   const [, drop] = useDrop();
 
-  const handleClick = useCallback((e) => {
+  // Collect events here and invoke callbacks with usefull arguments
+  const handleClickItemDetail = useCallback((e) => {
     onClick(id)
   }, [onClick]);
 
-  const handleChange = useCallback((e) => {
+  const handleChangeInputValue = useCallback((e) => {
     onChange(id, e.target.value)
   }, [onChange]);
 
-  const handleKeyDown = useCallback((e) => {
+  const handleKeyDownInput = useCallback((e) => {
     onKeyDown(id, e)
   }, [onKeyDown]);
 
   return (
     <div ref={(ref) => drop(preview(ref))}>
-      <Item ref={editMode ? drag : null} style={{ marginLeft: depth * 30 }} key={id} title="Show details">
-        <DraggingIcon title={editMode ? 'Přetáhní položku na požadované místo' : 'Přepni do Editmodu'} depth={depth} editMode={editMode}>
+      <Item style={{ marginLeft: depth * 30 }} key={id} editMode={editMode}>
+        <DraggingIcon ref={editMode ? drag : null} depth={depth} editMode={editMode}>
           <FontAwesomeIcon icon={faArrowsAlt}/>
         </DraggingIcon>
-        <div onClick={handleClick}>
-          <EditIcon title={'Editovat položku'}>
+        {!isNew &&
+          <EditIcon onClick={handleClickItemDetail} editMode={editMode}>
             <FontAwesomeIcon icon={faPen}/>
           </EditIcon>
-        </div>
-        <input style={{width: '100%', padding: '5px 10px'}} value={value} onChange={handleChange} onKeyDown={handleKeyDown} ref={myRef}/>
+        }
+        <input disabled={!editMode} value={value} onChange={handleChangeInputValue} onKeyDown={handleKeyDownInput} ref={myRef}/>
       </Item>
     </div>
   );

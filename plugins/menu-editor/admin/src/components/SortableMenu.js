@@ -10,6 +10,13 @@ import {faPlus} from "@fortawesome/free-solid-svg-icons";
 const ActionsMenu = styled.div`
   display: flex;
   > button {
+    color: ${props => props.editMode ? 'white' : 'grey'};
+    border-radius: 5px;
+    height: 3.1em;
+    font-size: 16px;
+    line-height: 2.2em;
+    display: flex;
+    align-items: center;
     > svg {
       font-size: 2em;
     }
@@ -58,22 +65,14 @@ export default memo(function SortableMenu({ itemCreator, items, onChange, onItem
   const ref = useRef(null)
   useEffect(() => {
     ref.current && ref.current.focus()
-  }, [ ref, items])
+  }, [ items.length ])
 
   return (
     <Fragment>
-      <ActionsMenu>
-        <Button kind="primary" title={editMode ? 'Add new item in structure' : 'You must be in "Edit mode"'} disabled={!editMode}
-                onClick={handleCreateItem(items)} style={editMode ? {
-          color: 'white',
-          border: '1px solid #0097f6',
-          borderRadius: '5px',
-          height: '3.5em',
-          fontSize: '16px',
-          lineHeight: '2.5em',
-          display: 'flex',
-          alignItems: 'center',
-        } : { color: 'grey' }}><FontAwesomeIcon icon={faPlus} />Vytvořit položku ve struktuře</Button>
+      <ActionsMenu editMode={editMode}>
+        <Button disabled={editMode} kind={editMode ? "primary" : "secondary"} disabled={!editMode} onClick={handleCreateItem(items)}>
+          <FontAwesomeIcon icon={faPlus} />Vytvořit položku ve struktuře
+        </Button>
       </ActionsMenu>
 
       <SortlyWrapper>
@@ -86,6 +85,7 @@ export default memo(function SortableMenu({ itemCreator, items, onChange, onItem
               id={props.data.id}
               value={props.data.name}
               depth={props.depth}
+              isNew={props.data.isNew}
               editMode={editMode}
               onClick={handleClickOnItem(items)}
               onChange={handleUpdateItem(items)}
