@@ -1,9 +1,7 @@
 const bookshelf = require('bookshelf');
 
 module.exports = model => ({
-  findOne: async ({id}) => await model.forge({id}).fetch(),
-  find: async () => await model.fetchAll(),
-  putSourceMenu: async (menu_items) => {
+  updateMany: async (menu_items) => {
     const Bookshelf = new bookshelf(strapi.connections.default);
     //TODO catch errors
     //return await Bookshelf.knex.transaction(async trx => {
@@ -38,15 +36,16 @@ module.exports = model => ({
     //const newMenuItems = menu_items.filter(item => Number.isNaN(parseInt(item.id)))
     //const updateMenuItems = menu_items.filter(item => !Number.isNaN(parseInt(item.id)))
 
+        console.log(menu_items)
     return await Bookshelf.knex.transaction(async trx => {
       try {
-        await Bookshelf.knex('menu-editor_source_menu')
-          .transacting(trx)
-          .del();
+        //await Bookshelf.knex('menu-editor_source_menu')
+        //  .transacting(trx)
+        //  .del();
 
-        const test = await Bookshelf.knex('menu-editor_source_menu')
+        const test = await Bookshelf.knex('pages')
           .transacting(trx)
-          .insert(menu_items);
+          .update(menu_items);
         console.log(test)
 
         await trx.commit;

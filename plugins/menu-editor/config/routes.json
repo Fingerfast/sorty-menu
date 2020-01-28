@@ -19,7 +19,7 @@
     {
       "method": "PUT",
       "path": "/source-menu",
-      "handler": "Source_menu.putSourceMenu",
+      "handler": "Source_menu.editMany",
       "config": {
         "policies": []
       }
