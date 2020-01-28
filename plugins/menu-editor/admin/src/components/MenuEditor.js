@@ -31,7 +31,11 @@ export default memo(function MenuEditor({ onChange, editMode, menuItems }) {
   }, [onChange]);
 
   const handleItemClick = useCallback((item) => {
-    history.push(`/${pluginPages}/${item.page_id}?redirectUrl=${location}`);
+    history.push(`/${pluginPages}/${item.id}?redirectUrl=${location}`);
+  }, [onChange]);
+
+  const handleClickAddNew = useCallback(() => {
+    history.push(`/${pluginPages}/create?redirectUrl=${location}`);
   }, [onChange]);
 
   const manager = useRef(createDndContext(HTML5Backend));
@@ -47,6 +51,7 @@ export default memo(function MenuEditor({ onChange, editMode, menuItems }) {
               items={menuItems}
               onChange={handleChange}
               onItemClick={handleItemClick}
+              onClickCreatePage={handleClickAddNew}
             />
           </ContextProvider>
         </DndProvider>

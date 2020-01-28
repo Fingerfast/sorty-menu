@@ -10,7 +10,8 @@ import {faPlus} from "@fortawesome/free-solid-svg-icons";
 const ActionsMenu = styled.div`
   display: flex;
   > button {
-    color: ${props => props.editMode ? 'white' : 'grey'};
+    // color: ${props => props.editMode ? 'white' : 'grey'};
+     color: white;
     border-radius: 5px;
     height: 3.1em;
     font-size: 16px;
@@ -30,13 +31,13 @@ const SortlyWrapper = styled.div`
   margin-top: 10px;
 `;
 
-export default memo(function SortableMenu({ itemCreator, items, onChange, onItemClick, editMode }) {
+export default memo(function SortableMenu({ itemCreator, items, onChange, onItemClick, onClickCreatePage, editMode }) {
 
   // Click on "add new" empty item with generate name
-  const handleCreateItem = useCallback((items) => () => {
-    const item = itemCreator(items);
-    onChange(add(items, item));
-  }, [onChange]);
+  // const handleCreateItem = useCallback((items) => () => {
+  //   const item = itemCreator(items);
+  //   onChange(add(items, item));
+  // }, [onChange]);
 
   // Handle changing name in item's inputs
   const handleUpdateItem = useCallback((items) => (id, value) => {
@@ -70,7 +71,7 @@ export default memo(function SortableMenu({ itemCreator, items, onChange, onItem
   return (
     <Fragment>
       <ActionsMenu editMode={editMode}>
-        <Button disabled={editMode} kind={editMode ? "primary" : "secondary"} disabled={!editMode} onClick={handleCreateItem(items)}>
+        <Button kind={"primary"} onClick={onClickCreatePage}>
           <FontAwesomeIcon icon={faPlus} />Vytvořit položku ve struktuře
         </Button>
       </ActionsMenu>
@@ -88,6 +89,7 @@ export default memo(function SortableMenu({ itemCreator, items, onChange, onItem
               isNew={props.data.isNew}
               editMode={editMode}
               onClick={handleClickOnItem(items)}
+              onCreate={onClickCreatePage}
               onChange={handleUpdateItem(items)}
               onKeyDown={handleKeyDown(items)}
               myRef={ref}
