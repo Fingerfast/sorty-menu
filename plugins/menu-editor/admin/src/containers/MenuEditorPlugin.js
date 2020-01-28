@@ -23,8 +23,16 @@ class MenuEditorPlugin extends React.Component {
       editMode: false,
     };
   }
+  
   componentDidMount() {
     this.getMenu();
+  }
+
+  componentDidUpdate(prevProps) {
+    console.group('DIDUPDATE?')
+    console.log('PrevProps', prevProps.menuItems)
+    console.log('NextProps', this.props.menuItems)
+    console.groupEnd()
   }
 
   getMenu = () => {

@@ -1,4 +1,4 @@
-import React, {useCallback} from "react";
+import React, {useCallback, useState, useEffect, useRef} from "react";
 import styled from 'styled-components';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useDrag, useDrop } from 'react-sortly';
@@ -60,23 +60,28 @@ const EditIcon = styled.div`
   }
 `;
 
-export default function SortableMenuItem ({ id, depth, value, onChange, onClick, onKeyDown, editMode }) {
+function SortableMenuItem (props) {
+  const { id, depth, value, 
+    //onChange, onClick, onKeyDown,
+    editMode
+  } = props
+  useWhyDidYouUpdate('Counter', props);
   const [{ isDragging }, drag, preview] = useDrag({
     collect: (monitor) => ({ isDragging: monitor.isDragging() })
   });
   const [, drop] = useDrop();
 
-  const handleClick = useCallback((e) => {
-    onClick(id)
-  }, [onClick]);
+  //const handleClick = useCallback((e) => {
+  //  onClick(id)
+  //}, [onClick]);
 
-  const handleChange = useCallback((e) => {
-    onChange(id, e.target.value)
-  }, [onChange]);
+  //const handleChange = useCallback((e) => {
+  //  onChange(id, e.target.value)
+  //}, [onChange]);
 
-  const handleKeyDown = useCallback((e) => {
-    onKeyDown(id, e)
-  }, [onKeyDown]);
+  //const handleKeyDown = useCallback((e) => {
+  //  onKeyDown(id, e)
+  //}, [onKeyDown]);
 
   return (
     <div ref={(ref) => drop(preview(ref))}>
@@ -84,13 +89,54 @@ export default function SortableMenuItem ({ id, depth, value, onChange, onClick,
         <DraggingIcon title={editMode ? 'Přetáhní položku na požadované místo' : 'Přepni do Editmodu'} depth={depth} editMode={editMode}>
           <FontAwesomeIcon icon={faArrowsAlt}/>
         </DraggingIcon>
-        <div onClick={handleClick}>
+        <div 
+          //onClick={handleClick}
+          >
           <EditIcon title={'Editovat položku'}>
             <FontAwesomeIcon icon={faPen}/>
           </EditIcon>
         </div>
-        <input style={{width: '100%', padding: '5px 10px'}} value={value} onChange={handleChange} onKeyDown={handleKeyDown}/>
+        <input style={{width: '100%', padding: '5px 10px'}} value={value} 
+          //onChange={handleChange} 
+          //onKeyDown={handleKeyDown}
+        />
       </Item>
     </div>
   );
 };
+// Hook
+function useWhyDidYouUpdate(name, props) {
+  // Get a mutable ref object where we can store props ...
+  // ... for comparison next time this hook runs.
+  const previousProps = useRef();
+
+  useEffect(() => {
+    if (previousProps.current) {
+      // Get all keys from previous and current props
+      const allKeys = Object.keys({ ...previousProps.current, ...props });
+      // Use this object to keep track of changed props
+      const changesObj = {};
+      // Iterate through keys
+      allKeys.forEach(key => {
+        // If previous is different from current
+        if (previousProps.current[key] !== props[key]) {
+          // Add to changesObj
+          changesObj[key] = {
+            from: previousProps.current[key],
+            to: props[key]
+          };
+        }
+      });
+
+      // If changesObj not empty then output to console
+      if (Object.keys(changesObj).length) {
+        console.log('[why-did-you-update]', name, changesObj);
+      }
+    }
+
+    // Finally update previousProps with current props for next hook call
+    previousProps.current = props;
+  });
+}
+
+export default React.memo(SortableMenuItem)

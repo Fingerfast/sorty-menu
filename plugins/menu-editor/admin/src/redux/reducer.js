@@ -1,4 +1,5 @@
 import { fromJS, List } from 'immutable';
+import add from 'immutability-helper';
 
 import {
   GET_MENU,
@@ -12,7 +13,7 @@ import {
 const initialState = fromJS({
   didCheckErrors: false,
   formErrors: List([]),
-  menuItems: [],
+  menuItems: List([]),
   modifiedMenuItemsData: [],
 });
 
@@ -25,7 +26,7 @@ function menuEditorReducer(state = initialState, action) {
     case GET_MENU_SUCCEEDED:
       return (
         state
-          .update('menuItems', () => action.menuItems)
+          //.update('menuItems', () => action.menuItems)
           .update('isLoading' , () => false)
       );
     case ON_CANCEL:
@@ -44,10 +45,22 @@ function menuEditorReducer(state = initialState, action) {
           .update('modifiedMenuItemsData', () => [])
       );
     case ON_CHANGE:
-      return (
-        state
-         .update(action.key, () => action.value)
-      );
+      console.group()
+      console.log(state)
+      const test = state.setIn(['menuItems', state.get('menuItems').size], action.value)
+      console.log(test)
+      console.groupEnd()
+      return test
+      //return (
+        //state
+        // .update(action.key, () => action.value)
+        //state.update('menuItems', myList => {
+        //  myList.push(action.value);
+        //  return myList
+        //})
+
+        //state.updateIn('menuItems', state.menuItems.set(action.value))
+      //);
     default:
       return state;
   }

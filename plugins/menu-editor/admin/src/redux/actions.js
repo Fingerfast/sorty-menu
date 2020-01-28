@@ -16,10 +16,9 @@ export function getMenuSucceeded({ menuItems }) {
     menuItems,
   };
 }
-export function onChange(key, value) {
+export function onChange(value) {
   return {
     type: ON_CHANGE,
-    key,
     value,
   };
 }

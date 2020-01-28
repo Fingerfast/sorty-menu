@@ -1,4 +1,6 @@
 import React, { Fragment, useCallback } from 'react';
+
+
 import Sortly, { add, insert } from 'react-sortly';
 import update from 'immutability-helper';
 import SortableMenuItem from './SortableMenuItem';
@@ -23,32 +25,47 @@ const SortlyWrapper = styled.div`
   margin-top: 10px;
 `;
 
+const Test = React.memo(props => {
+  useWhyDidYouUpdate('Counter', props);
+  return (
+    <SortableMenuItem
+      id={props.data.id}
+      value={props.data.name}
+      depth={props.depth}
+      editMode={editMode}
+      //onClick={handleClickOnItem}
+      //onChange={handleUpdateItem}
+      //onKeyDown={handleKeyDown}
+    />
+  )
+})
+
 export default function SortableMenu({ itemCreator, items, onChange, onItemClick, editMode }) {
 
   const handleCreateItem = useCallback(() => {
     const item = itemCreator(items);
-    onChange(add(items, item));
+    onChange(item);
   }, [items, onChange]);
 
-  const handleUpdateItem = useCallback((id, value) => {
-    const index = items.findIndex(item => item.id === id);
-    onChange(update(items, {
-      [index]: { name: { $set: value } }
-    }));
-  }, [items, onChange]);
+  //const handleUpdateItem = useCallback((id, value) => {
+  //  const index = items.findIndex(item => item.id === id);
+  //  onChange(update(items, {
+  //    [index]: { name: { $set: value } }
+  //  }));
+  //}, [items, onChange]);
 
-  const handleClickOnItem = useCallback((id) => {
-    const item = items.find(item => item.id === id);
-    onItemClick(item);
-  }, [onItemClick, items]);
+  //const handleClickOnItem = useCallback((id) => {
+  //  const item = items.find(item => item.id === id);
+  //  onItemClick(item);
+  //}, [onItemClick, items]);
 
-  const handleKeyDown = useCallback((id, e) => {
-    if(e.ctrlKey && e.key === 'Enter') {
-      const index = items.findIndex(item => item.id === id);
-      const item = itemCreator(items);
-      onChange(insert(items, item, index));
-    }
-  }, [onChange, items]);
+  //const handleKeyDown = useCallback((id, e) => {
+  //  if(e.ctrlKey && e.key === 'Enter') {
+  //    const index = items.findIndex(item => item.id === id);
+  //    const item = itemCreator(items);
+  //    onChange(insert(items, item, index));
+  //  }
+  //}, [onChange, items]);
 
   return (
     <Fragment>
@@ -66,20 +83,22 @@ export default function SortableMenu({ itemCreator, items, onChange, onItemClick
             items={items}
             onChange={onChange}
           >
-            {(props) => (
-              <SortableMenuItem
-                id={props.data.id}
-                value={props.data.name}
-                depth={props.depth}
-                editMode={editMode}
-                onClick={handleClickOnItem}
-                onChange={handleUpdateItem}
-                onKeyDown={handleKeyDown}
-              />
-            )}
+            {props => {
+  return (
+    <SortableMenuItem
+      id={props.data.id}
+      value={props.data.name}
+      depth={props.depth}
+      editMode={editMode}
+      //onClick={handleClickOnItem}
+      //onChange={handleUpdateItem}
+      //onKeyDown={handleKeyDown}
+    />
+  )}}
           </Sortly>
         </SortlyWrapper> :
         <div>loading...</div>}
     </Fragment>
   );
 };
+
