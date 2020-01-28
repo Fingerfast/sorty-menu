@@ -26,7 +26,6 @@ export function* menuGet() {
 
 export function* submit() {
   try {
-    console.log((yield select(SelectMenuItemsData())))
     const body = remapSortlyOutput(flatten(yield select(SelectMenuItemsData())));
     yield call(request, sourceMenuEndpoint, {
       method: 'PUT',

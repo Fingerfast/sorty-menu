@@ -3,17 +3,15 @@ export const remapSortlyInput = databaseOutput => {
   return databaseOutput.map(row => {
     const {
       id,
-      child_index = 0,
-      parent_id = null,
-      page_id: { Name },
-      page_id,
+      child_order = 0,
+      parent_id = 0,
+      Name
     } = row;
     return {
       id,
-      index: child_index,
+      index: child_order,
       parentId: parent_id,
       name: Name || '',
-      page_id: page_id.id,
     };
   });
 };
@@ -24,7 +22,7 @@ export const remapSortlyOutput = sortlyOutput => {
 
     return {
       id,
-      child_index: index,
+      child_order: index,
       parent_id: parentId === 0 ? null : parentId,
       name,
     };
