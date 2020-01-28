@@ -1,4 +1,4 @@
-import React, {useCallback} from "react";
+import React, {useCallback, memo} from "react";
 import styled from 'styled-components';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useDrag, useDrop } from 'react-sortly';
@@ -60,7 +60,8 @@ const EditIcon = styled.div`
   }
 `;
 
-export default function SortableMenuItem ({ id, depth, value, onChange, onClick, onKeyDown, editMode }) {
+export default memo(function SortableMenuItem ({ id, depth, value, onChange, onClick, onKeyDown, editMode, myRef }) {
+  // console.log("ITEM RERENDER", id)
   const [{ isDragging }, drag, preview] = useDrag({
     collect: (monitor) => ({ isDragging: monitor.isDragging() })
   });
@@ -89,8 +90,8 @@ export default function SortableMenuItem ({ id, depth, value, onChange, onClick,
             <FontAwesomeIcon icon={faPen}/>
           </EditIcon>
         </div>
-        <input style={{width: '100%', padding: '5px 10px'}} value={value} onChange={handleChange} onKeyDown={handleKeyDown}/>
+        <input style={{width: '100%', padding: '5px 10px'}} value={value} onChange={handleChange} onKeyDown={handleKeyDown} ref={myRef}/>
       </Item>
     </div>
   );
-};
+});

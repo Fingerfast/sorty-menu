@@ -1,4 +1,4 @@
-import React, { useCallback, useRef } from 'react';
+import React, { useCallback, useRef, memo } from 'react';
 import { createDndContext, DndProvider } from 'react-dnd';
 import HTML5Backend from 'react-dnd-html5-backend';
 import { ContextProvider } from 'react-sortly';
@@ -20,7 +20,8 @@ function createNewItem(items) {
   };
 }
 
-export default function MenuEditor({ onChange, editMode, menuItems }) {
+export default memo(function MenuEditor({ onChange, editMode, menuItems }) {
+  // console.log("MENU EDITOR RERENDER---",)
   // const pluginSourceMenus = "plugins/content-manager/plugins::menu-editor.source_menu";
 
   const history = useHistory();
@@ -37,19 +38,27 @@ export default function MenuEditor({ onChange, editMode, menuItems }) {
 
   const manager = useRef(createDndContext(HTML5Backend));
 
+  function focusRef(ref) {
+    ref.focus()
+  }
+
   return (
     <Wrapper>
-      <DndProvider manager={manager.current.dragDropManager} backend={HTML5Backend}>
-        <ContextProvider>
-          <SortableMenu
-            itemCreator={createNewItem}
-            editMode={editMode}
-            items={menuItems}
-            onChange={handleChange}
-            onItemClick={handleItemClick}
-          />
-        </ContextProvider>
-      </DndProvider>
+      {menuItems.length > 0 ?
+        <DndProvider manager={manager.current.dragDropManager} backend={HTML5Backend}>
+          <ContextProvider>
+            <SortableMenu
+              itemCreator={createNewItem}
+              editMode={editMode}
+              items={menuItems}
+              onChange={handleChange}
+              onItemClick={handleItemClick}
+              focusRef={focusRef}
+            />
+          </ContextProvider>
+        </DndProvider>
+        : <div>Loading...</div>
+      }
     </Wrapper>
   );
-};
+});
