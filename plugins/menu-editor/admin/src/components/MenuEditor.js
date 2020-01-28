@@ -21,8 +21,6 @@ function createNewItem(items) {
 }
 
 export default memo(function MenuEditor({ onChange, editMode, menuItems }) {
-  // console.log("MENU EDITOR RERENDER---",)
-  // const pluginSourceMenus = "plugins/content-manager/plugins::menu-editor.source_menu";
 
   const history = useHistory();
   const location = strapi.router.location.pathname ? strapi.router.location.pathname : '/plugins/menu-editor';
@@ -38,10 +36,6 @@ export default memo(function MenuEditor({ onChange, editMode, menuItems }) {
 
   const manager = useRef(createDndContext(HTML5Backend));
 
-  function focusRef(ref) {
-    ref.focus()
-  }
-
   return (
     <Wrapper>
       {menuItems.length > 0 ?
@@ -53,7 +47,6 @@ export default memo(function MenuEditor({ onChange, editMode, menuItems }) {
               items={menuItems}
               onChange={handleChange}
               onItemClick={handleItemClick}
-              focusRef={focusRef}
             />
           </ContextProvider>
         </DndProvider>

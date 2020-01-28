@@ -10,17 +10,31 @@ import reducer from '../redux/reducer';
 import saga from '../redux/saga';
 import selectMenuEditorPlugin from '../redux/selectors';
 import styled from 'styled-components'
+import Modal from 'react-modal';
+import { Button } from 'strapi-helper-plugin'
 
 const Hint = styled.div`
   font-size: 1em;
   margin-bottom: 10px;
 `
 
+const customStyles = {
+  content : {
+    top                   : '50%',
+    left                  : '50%',
+    right                 : 'auto',
+    bottom                : 'auto',
+    marginRight           : '-50%',
+    transform             : 'translate(-50%, -50%)'
+  }
+};
+
 class MenuEditorPlugin extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       editMode: false,
+      modalOpen: false,
     };
   }
   componentDidMount() {
@@ -31,9 +45,17 @@ class MenuEditorPlugin extends React.Component {
     this.props.getMenu();
   };
 
+  handleShowModal = () => {
+    this.setState({modalOpen: true})
+  }
+
+  handleCloseModal = () => {
+    this.setState({modalOpen: false})
+  }
+
   handleSubmit = e => {
-    e.preventDefault();
-    this.setState({editMode: false});
+    // e.preventDefault();
+    this.setState({editMode: false, modalOpen: false});
     return this.props.submit();
   };
 
@@ -46,13 +68,13 @@ class MenuEditorPlugin extends React.Component {
     {
       kind: 'secondary',
       label: 'menu-editor.MenuEditor.cancelEditMode',
-      onClick: this.cancelEditMode,
+      onClick: this.handleShowModal,
       type: 'button',
     },
     {
       kind: 'primary',
       label: 'app.components.Button.save',
-      onClick: this.handleSubmit,
+      onClick: this.handleShowModal,
       type: 'submit',
     },
   ];
@@ -68,8 +90,18 @@ class MenuEditorPlugin extends React.Component {
   render() {
     return (
       <Fragment>
-        <form onSubmit={this.handleSubmit}>
+        {/*<form onSubmit={this.handleSubmit}>*/}
           <ContainerFluid>
+            <Modal
+              isOpen={this.state.modalOpen}
+              onRequestClose={this.handleCloseModal}
+              style={customStyles}
+              contentLabel="Example Modal"
+            >
+              <p>Uložit aktualní stav struktury?</p>
+              <Button kind="primary" onClick={this.handleSubmit}>Ano</Button>
+              <Button kind="secondary" onClick={this.handleCloseModal}>Ne</Button>
+            </Modal>
             <PluginHeader
               title={{id: 'menu-editor.MenuEditor.title'}}
               description={{id: 'menu-editor.MenuEditor.description'}}
@@ -84,7 +116,7 @@ class MenuEditorPlugin extends React.Component {
               onChange={this.props.onChange}
             />
           </ContainerFluid>
-        </form>
+        {/*</form>*/}
       </Fragment>
     );
   }
