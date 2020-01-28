@@ -33,10 +33,11 @@
       "type": "boolean",
       "default": true
     },
-    "source_menus": {
-      "via": "page_id",
-      "plugin": "menu-editor",
-      "collection": "source_menu"
+    "parent_id": {
+      "type": "integer"
+    },
+    "child_order": {
+      "type": "integer"
     }
   }
 }
