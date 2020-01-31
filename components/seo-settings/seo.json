@@ -1,0 +1,55 @@
+{
+  "connection": "default",
+  "collectionName": "groups_seos",
+  "info": {
+    "name": "seo_settings",
+    "description": "Various SEO attributes",
+    "icon": "ad"
+  },
+  "attributes": {
+    "urlSlug": {
+      "type": "string",
+      "required": true
+    },
+    "canonicalUrl": {
+      "type": "string",
+      "required": false
+    },
+    "title": {
+      "type": "string",
+      "required": false
+    },
+    "description": {
+      "type": "text",
+      "required": false
+    },
+    "keywords": {
+      "type": "string",
+      "required": false
+    },
+    "robots": {
+      "enum": [
+        "index_follow",
+        "index_nofollow",
+        "noindex_follow",
+        "noindex_nofollow"
+      ],
+      "default": "index_follow",
+      "type": "enumeration",
+      "required": false
+    },
+    "includeToSitemap": {
+      "type": "boolean",
+      "default": true,
+      "required": false
+    },
+    "codeGA": {
+      "type": "string",
+      "required": false
+    },
+    "codeGTM": {
+      "type": "string",
+      "required": false
+    }
+  }
+}

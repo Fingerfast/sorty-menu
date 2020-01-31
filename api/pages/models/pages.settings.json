@@ -13,7 +13,7 @@
       "type": "string",
       "private": false,
       "required": true,
-      "unique": true
+      "unique": false
     },
     "Concept": {
       "type": "boolean"
@@ -38,6 +38,14 @@
     },
     "child_order": {
       "type": "integer"
+    },
+    "slug": {
+      "type": "string"
+    },
+    "seo": {
+      "type": "component",
+      "repeatable": false,
+      "component": "seo-settings.seo"
     }
   }
 }

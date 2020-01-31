@@ -1,0 +1,10 @@
+{
+  "connection": "default",
+  "collectionName": "components_seo_tests",
+  "info": {
+    "name": "test",
+    "icon": "asterisk"
+  },
+  "options": {},
+  "attributes": {}
+}

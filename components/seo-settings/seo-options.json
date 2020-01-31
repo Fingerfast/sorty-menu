@@ -1,0 +1,10 @@
+{
+  "info": {
+    "name": "seo_options",
+    "icon": "audio-description"
+  },
+  "options": {},
+  "attributes": {},
+  "connection": "default",
+  "collectionName": "components_seo_settings_seo_options"
+}

@@ -9,14 +9,9 @@ import { onChange, submit, getMenu} from '../redux/actions';
 import reducer from '../redux/reducer';
 import saga from '../redux/saga';
 import selectMenuEditorPlugin from '../redux/selectors';
-import styled from 'styled-components'
 import Modal from 'react-modal';
 import { Button } from 'strapi-helper-plugin'
-
-const Hint = styled.div`
-  font-size: 1em;
-  margin-bottom: 10px;
-`
+import { FormattedMessage } from 'react-intl';
 
 const customStyles = {
   content : {
@@ -90,33 +85,28 @@ class MenuEditorPlugin extends React.Component {
   render() {
     return (
       <Fragment>
-        {/*<form onSubmit={this.handleSubmit}>*/}
-          <ContainerFluid>
-            <Modal
-              isOpen={this.state.modalOpen}
-              onRequestClose={this.handleCloseModal}
-              style={customStyles}
-              contentLabel="Example Modal"
-            >
-              <p>Uložit aktualní stav struktury?</p>
-              <Button kind="primary" onClick={this.handleSubmit}>Ano</Button>
-              <Button kind="secondary" onClick={this.handleCloseModal}>Ne</Button>
-            </Modal>
-            <PluginHeader
-              title={{id: 'menu-editor.MenuEditor.title'}}
-              description={{id: 'menu-editor.MenuEditor.description'}}
-              actions={this.state.editMode ? this.pluginHeaderActions : this.actionEdit}
-            />
-            <Hint>Pozn.: Pro editaci stuktury webu přepnout do "Edit modu".</Hint>
-            <MenuEditor
-              menuItems={this.props.menuItems}
-              modifiedMenuItemsData={this.props.modifiedMenuItemsData}
-              editMode={this.state.editMode}
-              // editMode={true}
-              onChange={this.props.onChange}
-            />
-          </ContainerFluid>
-        {/*</form>*/}
+        <ContainerFluid>
+          <Modal
+            isOpen={this.state.modalOpen}
+            onRequestClose={this.handleCloseModal}
+            style={customStyles}
+            contentLabel="Example Modal"
+          >
+            <p><FormattedMessage id={'menu-editor.MenuEditor.confirmSaveStructure'}/></p>
+            <Button kind="primary" onClick={this.handleSubmit}><FormattedMessage id={'menu-editor.MenuEditor.yes'}/></Button>
+            <Button kind="secondary" onClick={this.handleCloseModal}><FormattedMessage id={'menu-editor.MenuEditor.no'}/></Button>
+          </Modal>
+          <PluginHeader
+            title={{id: 'menu-editor.MenuEditor.title'}}
+            description={{id: 'menu-editor.MenuEditor.description'}}
+            actions={this.state.editMode ? this.pluginHeaderActions : this.actionEdit}
+          />
+          <MenuEditor
+            menuItems={this.props.menuItems}
+            editMode={this.state.editMode}
+            onChange={this.props.onChange}
+          />
+        </ContainerFluid>
       </Fragment>
     );
   }
