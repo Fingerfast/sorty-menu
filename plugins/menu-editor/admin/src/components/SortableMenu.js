@@ -6,11 +6,12 @@ import styled from 'styled-components';
 import { Button } from 'strapi-helper-plugin'
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faPlus} from "@fortawesome/free-solid-svg-icons";
+import { FormattedMessage } from 'react-intl';
+import mock from './mock.json'
 
 const ActionsMenu = styled.div`
   display: flex;
   > button {
-    // color: ${props => props.editMode ? 'white' : 'grey'};
      color: white;
     border-radius: 5px;
     height: 3.1em;
@@ -32,12 +33,6 @@ const SortlyWrapper = styled.div`
 `;
 
 export default memo(function SortableMenu({ itemCreator, items, onChange, onItemClick, onClickCreatePage, editMode }) {
-
-  // Click on "add new" empty item with generate name
-  // const handleCreateItem = useCallback((items) => () => {
-  //   const item = itemCreator(items);
-  //   onChange(add(items, item));
-  // }, [onChange]);
 
   // Handle changing name in item's inputs
   const handleUpdateItem = useCallback((items) => (id, value) => {
@@ -72,7 +67,7 @@ export default memo(function SortableMenu({ itemCreator, items, onChange, onItem
     <Fragment>
       <ActionsMenu editMode={editMode}>
         <Button kind={"primary"} onClick={onClickCreatePage}>
-          <FontAwesomeIcon icon={faPlus} />Vytvořit položku ve struktuře
+          <FontAwesomeIcon icon={faPlus} /><FormattedMessage id={'menu-editor.MenuEditor.addNewItem'}/>
         </Button>
       </ActionsMenu>
 

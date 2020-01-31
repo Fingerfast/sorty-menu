@@ -1,8 +1,11 @@
 {
   "MenuEditor.addNewItem": "Add new item",
+  "MenuEditor.yes": "Yes",
+  "MenuEditor.no": "No",
+  "MenuEditor.confirmSaveStructure": "Save actual state structure ?",
   "MenuEditor.addNewRelatedItem": "Add new related item",
   "MenuEditor.dataSaved": "Data Saved",
-  "MenuEditor.description": "Edit menus here",
+  "MenuEditor.description": "Tool for change menu hierarchy",
   "MenuEditor.title": "Menu - Editor",
   "MenuEditor.switchToEditMode": "Switch to edit mode",
   "MenuEditor.remove": "Remove",

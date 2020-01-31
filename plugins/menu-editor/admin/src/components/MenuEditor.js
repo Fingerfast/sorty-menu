@@ -6,37 +6,43 @@ import SortableMenu from './SortableMenu';
 import styled from 'styled-components';
 import { useHistory } from 'react-router-dom';
 import nanoid from 'nanoid/non-secure';
+import { FormattedMessage } from 'react-intl';
 
 const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
 `;
 
+const newItemLabel = <FormattedMessage id={'menu-editor.MenuEditor.addNewItem'}/>
+
 function createNewItem(items) {
   return {
     id: nanoid(12),
-    name: 'Nová položka ' + items.length,
+    name: {newItemLabel} + items.length,
     isNew: true
   };
 }
 
 export default memo(function MenuEditor({ onChange, editMode, menuItems }) {
 
-  const history = useHistory();
-  const location = strapi.router.location.pathname ? strapi.router.location.pathname : '/plugins/menu-editor';
-  const pluginPages = 'plugins/content-manager/application::pages.pages';
-
+  // Handling all changes in structure
   const handleChange = useCallback((items) => {
     onChange('menuItems', items);
   }, [onChange]);
 
-  const handleItemClick = useCallback((item) => {
-    history.push(`/${pluginPages}/${item.id}?redirectUrl=${location}`);
-  }, [onChange]);
+  const history = useHistory();
+  const location = strapi.router.location.pathname ? strapi.router.location.pathname : '/plugins/menu-editor';
+  const pages = 'plugins/content-manager/application::pages.pages';
 
+  // Page details
+  const handleItemClick = useCallback((item) => {
+    history.push(`/${pages}/${item.id}?redirectUrl=${location}`);
+  }, []);
+
+  // Create new page
   const handleClickAddNew = useCallback(() => {
-    history.push(`/${pluginPages}/create?redirectUrl=${location}`);
-  }, [onChange]);
+    history.push(`/${pages}/create?redirectUrl=${location}`);
+  }, []);
 
   const manager = useRef(createDndContext(HTML5Backend));
 

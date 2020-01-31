@@ -1,5 +1,4 @@
 export const remapSortlyInput = databaseOutput => {
-  console.log(databaseOutput)
   return databaseOutput.map(row => {
     const {
       id,
