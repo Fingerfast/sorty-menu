@@ -7,7 +7,6 @@ import { Button } from 'strapi-helper-plugin'
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faPlus} from "@fortawesome/free-solid-svg-icons";
 import { FormattedMessage } from 'react-intl';
-import mock from './mock.json'
 
 const ActionsMenu = styled.div`
   display: flex;
