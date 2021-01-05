@@ -8,7 +8,7 @@
     "description": "Description of menu-editor plugin."
   },
   "dependencies": {
-    "axios": "^0.19.0",
+    "axios": "^0.21.1",
     "axios-hooks": "^1.9.0",
     "immutability-helper": "^3.0.1",
     "nanoid": "^2.1.8",
